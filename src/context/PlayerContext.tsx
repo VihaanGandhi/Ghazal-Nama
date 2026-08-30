@@ -241,7 +241,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       setStatus("loading");
       setProgress(0);
       setDuration(0);
+      player.mute?.();
       player.loadVideoById({ videoId, startSeconds: 0 });
+      player.playVideo?.();
+      player.unMute?.();
       player.setVolume?.(muted ? 0 : volume);
       loadedId.current = videoId;
       // If the browser refuses to start sound from a gesture made outside the
@@ -294,7 +297,15 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     // the dock can explain itself and offer a search — it never fakes playback.
     setStatus(track.videoId ? "loading" : "unavailable");
     setNeedsGesture(false);
-  }, []);
+    if (track.videoId) {
+      const videoId = track.videoId;
+      if (!loadAndPlay(videoId)) {
+        loadYouTubeApi().then(() =>
+          window.setTimeout(() => loadAndPlay(videoId), 120)
+        );
+      }
+    }
+  }, [loadAndPlay]);
 
   const toggle = useCallback(() => {
     const player = playerRef.current;
@@ -312,6 +323,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     if (state === 1) {
       player.pauseVideo();
     } else {
+      player.unMute?.();
+      player.setVolume?.(muted ? 0 : volume);
       player.playVideo();
       setNeedsGesture(false);
       if (gestureTimer.current) window.clearTimeout(gestureTimer.current);
