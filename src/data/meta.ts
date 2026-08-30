@@ -21,7 +21,7 @@ export const moods: MoodMeta[] = [
     label: "Ishq",
     phrase: "Not a mood. A climate.",
     description:
-      "Desire without hurry — the ghazal’s oldest weather.",
+      "Desire without hurry — the ghazal's oldest weather.",
   },
   {
     id: "mehfil",
@@ -72,42 +72,42 @@ export const eras: EraMeta[] = [
     id: "1940s",
     label: "1940s",
     description:
-      "Radio Lucknow and HMV. Talat Mahmood’s first ghazals, before Bombay fully claims the velvet voice.",
+      "Radio Lucknow and HMV. Talat Mahmood's first ghazals, before Bombay fully claims the velvet voice.",
     singer_ids: ["talat-mahmood", "begum-akhtar"],
   },
   {
     id: "1950s",
     label: "1950s",
     description:
-      "Film ghazal’s high summer. Talat, Begum Akhtar, and a diction the studios have not yet diluted.",
+      "Film ghazal's high summer. Talat, Begum Akhtar, and a diction the studios have not yet diluted.",
     singer_ids: ["talat-mahmood", "begum-akhtar"],
   },
   {
     id: "1960s",
     label: "1960s",
     description:
-      "Mehdi Hassan’s public arrival. Farida Khanum’s concert art. Begum Akhtar’s late mastery.",
-    singer_ids: ["mehdi-hassan", "begum-akhtar", "farida-khanum", "talat-mahmood"],
+      "Mehdi Hassan's public arrival. Begum Akhtar's late mastery. The concert rooms of the subcontinent.",
+    singer_ids: ["mehdi-hassan", "begum-akhtar", "talat-mahmood"],
   },
   {
     id: "1970s",
     label: "1970s",
     description:
-      "The Unforgettables. Radio Pakistan’s golden ghazal. Cassettes beginning to replace the mehfil as the room.",
-    singer_ids: ["jagjit-singh", "mehdi-hassan", "ghulam-ali", "farida-khanum", "iqbal-bano", "munni-begum"],
+      "The Unforgettables. Radio Pakistan's golden ghazal. Cassettes beginning to replace the mehfil as the room.",
+    singer_ids: ["jagjit-singh", "mehdi-hassan", "ghulam-ali", "iqbal-bano"],
   },
   {
     id: "1980s",
     label: "1980s",
     description:
-      "Ghazal as popular music in India. Jagjit, Pankaj Udhas, Ghulam Ali; Iqbal Bano’s Hum Dekhenge in Lahore.",
-    singer_ids: ["jagjit-singh", "pankaj-udhas", "ghulam-ali", "mehdi-hassan", "iqbal-bano", "munni-begum", "farida-khanum"],
+      "Ghazal as popular music in India. Jagjit, Pankaj Udhas, Ghulam Ali; Iqbal Bano's Hum Dekhenge in Lahore.",
+    singer_ids: ["jagjit-singh", "pankaj-udhas", "ghulam-ali", "mehdi-hassan", "iqbal-bano"],
   },
   {
     id: "1990s",
     label: "1990s",
     description:
-      "After the boom, the keepers. Hariharan’s Gulfam, Jagjit’s Marasim, a quieter fidelity to the form.",
+      "After the boom, the keepers. Hariharan's Gulfam, Jagjit's Marasim, a quieter fidelity to the form.",
     singer_ids: ["hariharan", "jagjit-singh", "pankaj-udhas", "ghulam-ali"],
   },
   {
@@ -115,7 +115,7 @@ export const eras: EraMeta[] = [
     label: "2000s",
     description:
       "Studio ghazal after the century turns. Kaash, later concerts, and the archive beginning to look at itself.",
-    singer_ids: ["hariharan", "jagjit-singh", "farida-khanum", "ghulam-ali"],
+    singer_ids: ["hariharan", "jagjit-singh", "ghulam-ali"],
   },
 ];
 
@@ -126,7 +126,7 @@ function idsBy(pred: (g: (typeof ghazals)[number]) => boolean, limit = 12): stri
 export const collections: Collection[] = [
   {
     id: "tonights-mehfil",
-    title: "Tonight’s Mehfil",
+    title: "Tonight's Mehfil",
     slug: "tonights-mehfil",
     kicker: "Vol. I",
     description:
@@ -139,7 +139,6 @@ export const collections: Collection[] = [
       "gh-081", // Aaj Jaane
       "gh-042", // Hungama
       "gh-161", // Dasht
-      "gh-181", // Mareez
     ],
   },
   {
@@ -148,9 +147,9 @@ export const collections: Collection[] = [
     slug: "voices-of-pakistan",
     kicker: "The other capital",
     description:
-      "Mehdi Hassan, Ghulam Ali, Farida Khanum, Iqbal Bano, Munni Begum — the archive’s western rooms.",
+      "Mehdi Hassan, Ghulam Ali, Iqbal Bano — the archive's western rooms.",
     ghazal_ids: idsBy((g) =>
-      ["mehdi-hassan", "ghulam-ali", "farida-khanum", "iqbal-bano", "munni-begum"].includes(
+      ["mehdi-hassan", "ghulam-ali", "iqbal-bano"].includes(
         g.singer_id
       )
     ),
@@ -161,9 +160,9 @@ export const collections: Collection[] = [
     slug: "women-of-ghazal",
     kicker: "Mallika",
     description:
-      "Begum Akhtar, Farida Khanum, Iqbal Bano, Munni Begum — four ways of keeping the night.",
+      "Begum Akhtar, Iqbal Bano — two ways of keeping the night.",
     ghazal_ids: idsBy((g) =>
-      ["begum-akhtar", "farida-khanum", "iqbal-bano", "munni-begum"].includes(g.singer_id)
+      ["begum-akhtar", "iqbal-bano"].includes(g.singer_id)
     ),
   },
   {
@@ -210,7 +209,7 @@ export const collections: Collection[] = [
     slug: "cassette-eighties",
     kicker: "1980–1989",
     description:
-      "The decade the ghazal became a drawing-room habit. Jagjit, Pankaj, Ghulam Ali, Munni Begum.",
+      "The decade the ghazal became a drawing-room habit. Jagjit, Pankaj, Ghulam Ali.",
     ghazal_ids: idsBy((g) => g.era === "1980s", 16),
   },
   {

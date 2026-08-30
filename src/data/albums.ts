@@ -15,8 +15,6 @@ export const albums: Album[] = [
   { id: "jaag-utha-insan", title: "Jaag Utha Insan", slug: "jaag-utha-insan", singer_id: "mehdi-hassan", year: 1966, note: "Film" },
   { id: "zeenat", title: "Zeenat", slug: "zeenat", singer_id: "mehdi-hassan", year: 1975, note: "Film" },
   { id: "nikaah", title: "Nikaah", slug: "nikaah", singer_id: "ghulam-ali", year: 1982, note: "Film" },
-  { id: "farida-in-concert-1", title: "Farida Khanum In Concert, Vol. 1", slug: "farida-in-concert-1", singer_id: "farida-khanum", year: 1978 },
-  { id: "meri-pasand-1", title: "Meri Pasand, Vol. 1", slug: "meri-pasand-1", singer_id: "farida-khanum", year: 1993 },
   { id: "sujata", title: "Sujata", slug: "sujata", singer_id: "talat-mahmood", year: 1959, note: "Film" },
   { id: "footpath", title: "Footpath", slug: "footpath", singer_id: "talat-mahmood", year: 1953, note: "Film" },
   { id: "tarana", title: "Tarana", slug: "tarana", singer_id: "talat-mahmood", year: 1951, note: "Film" },

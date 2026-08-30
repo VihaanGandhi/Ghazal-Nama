@@ -5,12 +5,10 @@ const ARTISTS = [
   "Mehdi Hassan",
   "Ghulam Ali",
   "Begum Akhtar",
-  "Farida Khanum",
   "Talat Mahmood",
   "Pankaj Udhas",
   "Hariharan",
   "Iqbal Bano",
-  "Munni Begum",
 ];
 
 export function Hero() {
@@ -144,7 +142,12 @@ export function Hero() {
         </svg>
       </div>
 
-      <style jsx>{`\n        @keyframes twinkle {\n          0%, 100% { opacity: 0.2; }\n          50% { opacity: 0.8; }\n        }\n      `}</style>
+      <style jsx>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.2; }
+          50% { opacity: 0.8; }
+        }
+      `}</style>
     </section>
   );
 }
