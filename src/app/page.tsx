@@ -88,7 +88,7 @@ export default function HomePage() {
           subtitle="Not a timeline of products. A history of rooms."
         />
         <EraTimeline />
-        <p className="mt-16 text-center font-mono text-[10px] tracking-[0.28em] text-ink-ghost">
+        <p className="mt-16 text-center font-mono text-[10px] tracking-[0.28em] text-[#a09a8e]/40">
           GHAZAL NAMA  ·  VOL. I  ·  P. 01
         </p>
       </section>

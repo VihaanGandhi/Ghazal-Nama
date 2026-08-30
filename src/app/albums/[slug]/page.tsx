@@ -24,10 +24,10 @@ export default function AlbumPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <p className="kicker">{album.note ?? "Album"}</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep">{album.title}</h1>
-      <p className="mt-3 font-display text-xl italic text-ink-fade">
+      <h1 className="display mt-3 text-5xl text-[#e8e6e3]">{album.title}</h1>
+      <p className="mt-3 font-display text-xl italic text-[#a09a8e]">
         {singer ? (
-          <Link href={`/singers/${singer.slug}`} className="hover:text-burgundy">
+          <Link href={`/singers/${singer.slug}`} className="hover:text-[#b08d3e]">
             {singer.name}
           </Link>
         ) : (
@@ -39,7 +39,7 @@ export default function AlbumPage({ params }: { params: Params }) {
         {items.length ? (
           <ArchiveList items={items} />
         ) : (
-          <p className="font-display italic text-ink-fade">
+          <p className="font-display italic text-[#a09a8e]">
             No recordings from this album have been entered yet.
           </p>
         )}

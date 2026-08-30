@@ -8,18 +8,18 @@ import { ghazalListenUrl } from "@/lib/spotify";
 
 export function GhazalList({ items }: { items: Ghazal[] }) {
   return (
-    <ol className="divide-y divide-burgundy/15 border-y border-burgundy/20">
+    <ol className="divide-y divide-[#2a2a35]/50 border-y border-[#2a2a35]">
       {items.map((g, i) => {
         const singer = singerOf(g);
         const poet = poetOf(g);
         return (
           <li key={g.id} className="archive-row flex items-center gap-4 py-3">
-            <span className="w-8 font-mono text-xs text-burgundy/70">{padCatalog(i)}</span>
+            <span className="w-8 font-mono text-xs text-[#b08d3e]/70">{padCatalog(i)}</span>
             <div className="min-w-0 flex-1">
-              <Link href={`/ghazals/${g.slug}`} className="font-display text-xl hover:text-burgundy">
+              <Link href={`/ghazals/${g.slug}`} className="font-display text-xl hover:text-[#b08d3e]">
                 {g.title}
               </Link>
-              <p className="font-mono text-[10px] tracking-[0.14em] text-ink-fade">
+              <p className="font-mono text-[10px] tracking-[0.14em] text-[#a09a8e]">
                 {poet?.name ?? singer?.name ?? ""}
                 {g.album_id ? "" : ""}
               </p>
@@ -28,7 +28,7 @@ export function GhazalList({ items }: { items: Ghazal[] }) {
               href={ghazalListenUrl(g, singer?.name)}
               target="_blank"
               rel="noreferrer"
-              className="hidden text-burgundy/70 hover:text-burgundy sm:inline"
+              className="hidden text-[#b08d3e]/70 hover:text-[#b08d3e] sm:inline"
               aria-label="Spotify"
             >
               <SpotifyMark />

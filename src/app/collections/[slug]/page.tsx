@@ -24,8 +24,8 @@ export default function CollectionPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <p className="kicker">{collection.kicker ?? "Collection"}</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep">{collection.title}</h1>
-      <p className="mt-4 max-w-2xl font-display text-xl italic text-ink-fade">
+      <h1 className="display mt-3 text-5xl text-[#e8e6e3]">{collection.title}</h1>
+      <p className="mt-4 max-w-2xl font-display text-xl italic text-[#a09a8e]">
         {collection.description}
       </p>
       <div className="mt-6">

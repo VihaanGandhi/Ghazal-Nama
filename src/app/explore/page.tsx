@@ -16,8 +16,8 @@ export default function ExplorePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <p className="kicker">The rooms</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep sm:text-6xl">Explore</h1>
-      <p className="mt-4 max-w-2xl font-display text-xl italic text-ink-fade">
+      <h1 className="display mt-3 text-5xl text-[#e8e6e3] sm:text-6xl">Explore</h1>
+      <p className="mt-4 max-w-2xl font-display text-xl italic text-[#a09a8e]">
         Begin anywhere. Singer, poet, mood, era — the archive is built so that one recording always
         opens another door.
       </p>
@@ -30,11 +30,11 @@ export default function ExplorePage() {
             <Link
               key={c.id}
               href={`/collections/${c.slug}`}
-              className="border border-burgundy/20 bg-ivory-soft/60 p-5 hover:border-burgundy/40"
+              className="border border-[#2a2a35] bg-[#121218] p-5 hover:border-[#b08d3e]/40 hover:bg-[#1a1a24]"
             >
               <p className="kicker">{c.kicker}</p>
-              <h3 className="mt-2 font-display text-3xl text-burgundy-deep">{c.title}</h3>
-              <p className="mt-2 font-display italic text-ink-fade">{c.description}</p>
+              <h3 className="mt-2 font-display text-3xl text-[#e8e6e3]">{c.title}</h3>
+              <p className="mt-2 font-display italic text-[#a09a8e]">{c.description}</p>
             </Link>
           ))}
         </div>

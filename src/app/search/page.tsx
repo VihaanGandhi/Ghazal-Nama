@@ -18,8 +18,8 @@ export default function SearchPage({
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <p className="kicker">The index</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep">Search the archive</h1>
-      <p className="mt-3 font-display italic text-ink-fade">
+      <h1 className="display mt-3 text-5xl text-[#e8e6e3]">Search the archive</h1>
+      <p className="mt-3 font-display italic text-[#a09a8e]">
         Ghazal, singer, poet, album, era, mood.
       </p>
       <div className="mt-8">
@@ -28,18 +28,18 @@ export default function SearchPage({
       {q ? (
         <div className="mt-12 space-y-12">
           <section>
-            <h2 className="display text-3xl text-burgundy-deep">Ghazals</h2>
+            <h2 className="display text-3xl text-[#e8e6e3]">Ghazals</h2>
             {results.ghazals.length ? (
               <div className="mt-4">
                 <ArchiveList items={results.ghazals} />
               </div>
             ) : (
-              <p className="mt-3 font-display italic text-ink-fade">No ghazals matched.</p>
+              <p className="mt-3 font-display italic text-[#a09a8e]">No ghazals matched.</p>
             )}
           </section>
           {results.singers.length > 0 && (
             <section>
-              <h2 className="display mb-4 text-3xl text-burgundy-deep">Singers</h2>
+              <h2 className="display mb-4 text-3xl text-[#e8e6e3]">Singers</h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {results.singers.map((s, i) => (
                   <SingerCard key={s.id} singer={s} index={i} />
@@ -49,7 +49,7 @@ export default function SearchPage({
           )}
           {results.poets.length > 0 && (
             <section>
-              <h2 className="display mb-4 text-3xl text-burgundy-deep">Poets</h2>
+              <h2 className="display mb-4 text-3xl text-[#e8e6e3]">Poets</h2>
               <div className="grid gap-4 md:grid-cols-2">
                 {results.poets.map((p) => (
                   <PoetCard key={p.id} poet={p} />

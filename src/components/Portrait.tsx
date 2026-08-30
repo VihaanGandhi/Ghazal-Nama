@@ -33,7 +33,7 @@ export function Portrait({
   const showPhoto = src && !failed;
 
   return (
-    <div className={`relative overflow-hidden bg-burgundy-deep ${className}`}>
+    <div className={`relative overflow-hidden bg-[#0a0a0f] ${className}`}>
       {showPhoto ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -50,9 +50,9 @@ export function Portrait({
             alt=""
             className="h-full w-full object-cover opacity-70 saturate-[0.6] contrast-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-burgundy-deep/80 via-burgundy-deep/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/80 via-[#0a0a0f]/30 to-transparent" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-display text-6xl text-ivory/80 sm:text-7xl">{initials}</span>
+            <span className="font-display text-6xl text-[#e8e6e3]/80 sm:text-7xl">{initials}</span>
           </div>
         </>
       )}

@@ -19,12 +19,12 @@ export default function CollectionsPage() {
           <Link
             key={c.id}
             href={`/collections/${c.slug}`}
-            className="border border-burgundy/20 bg-ivory-soft/50 p-6 transition hover:border-burgundy/45"
+            className="border border-[#2a2a35] bg-[#121218] p-6 transition hover:border-[#b08d3e]/40 hover:bg-[#1a1a24]"
           >
             <p className="kicker">{c.kicker}</p>
-            <h2 className="mt-2 font-display text-4xl text-burgundy-deep">{c.title}</h2>
-            <p className="mt-3 font-display italic text-ink-fade">{c.description}</p>
-            <p className="mt-4 font-mono text-[10px] tracking-[0.18em] text-ink-ghost">
+            <h2 className="mt-2 font-display text-4xl text-[#e8e6e3]">{c.title}</h2>
+            <p className="mt-3 font-display italic text-[#a09a8e]">{c.description}</p>
+            <p className="mt-4 font-mono text-[10px] tracking-[0.18em] text-[#a09a8e]/60">
               {c.ghazal_ids.length} RECORDINGS
             </p>
           </Link>

@@ -20,7 +20,7 @@ export default function PoetsPage() {
           <PoetCard key={p.id} poet={p} />
         ))}
       </div>
-      <h2 className="display mt-16 text-3xl text-burgundy-deep">Also in the archive</h2>
+      <h2 className="display mt-16 text-3xl text-[#e8e6e3]">Also in the archive</h2>
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {rest.map((p) => (
           <PoetCard key={p.id} poet={p} />

@@ -36,35 +36,35 @@ export default function SingerPage({ params }: { params: Params }) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <div className="grid items-start gap-10 md:grid-cols-[minmax(0,0.85fr)_1.15fr]">
-        <div className="photo-plate -rotate-[0.5deg]">
+        <div className="relative overflow-hidden border border-[#2a2a35] bg-[#121218] -rotate-[0.5deg]">
           <Portrait src={singer.photo} name={singer.name} className="aspect-[4/5]" />
         </div>
         <div>
           <p className="kicker">{singer.honorific}</p>
-          <h1 className="display mt-3 text-5xl uppercase tracking-wide text-burgundy-deep sm:text-6xl">
+          <h1 className="display mt-3 text-5xl uppercase tracking-wide text-[#e8e6e3] sm:text-6xl">
             {singer.name}
           </h1>
-          <p className="mt-4 font-display text-2xl italic text-ink-fade">{singer.shortBio}</p>
-          <p className="mt-6 max-w-xl font-display text-lg leading-relaxed text-ink-soft">
+          <p className="mt-4 font-display text-2xl italic text-[#a09a8e]">{singer.shortBio}</p>
+          <p className="mt-6 max-w-xl font-display text-lg leading-relaxed text-[#a09a8e]">
             {singer.bio}
           </p>
-          <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] tracking-[0.18em] text-ink-fade">
+          <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] tracking-[0.18em] text-[#a09a8e]">
             <div>
-              <dt className="text-burgundy">ERA</dt>
-              <dd className="mt-1 text-ink">{singer.era}</dd>
+              <dt className="text-[#b08d3e]">ERA</dt>
+              <dd className="mt-1 text-[#e8e6e3]">{singer.era}</dd>
             </div>
             {singer.born ? (
               <div>
-                <dt className="text-burgundy">BORN</dt>
-                <dd className="mt-1 text-ink">
+                <dt className="text-[#b08d3e]">BORN</dt>
+                <dd className="mt-1 text-[#e8e6e3]">
                   {singer.born}
                   {singer.died ? ` – ${singer.died}` : ""}
                 </dd>
               </div>
             ) : null}
             <div>
-              <dt className="text-burgundy">IN THE LEDGER</dt>
-              <dd className="mt-1 text-ink">{ghazals.length} ghazals</dd>
+              <dt className="text-[#b08d3e]">IN THE LEDGER</dt>
+              <dd className="mt-1 text-[#e8e6e3]">{ghazals.length} ghazals</dd>
             </div>
           </dl>
           <div className="mt-8">
@@ -73,7 +73,7 @@ export default function SingerPage({ params }: { params: Params }) {
         </div>
       </div>
 
-      <nav className="mt-14 flex flex-wrap gap-5 border-y border-burgundy/20 py-3 font-mono text-[10px] tracking-[0.22em] text-burgundy">
+      <nav className="mt-14 flex flex-wrap gap-5 border-y border-[#2a2a35] py-3 font-mono text-[10px] tracking-[0.22em] text-[#b08d3e]">
         <a href="#about">ABOUT</a>
         <a href="#ghazals">ESSENTIAL GHAZALS</a>
         <a href="#albums">ALBUMS</a>
@@ -82,25 +82,25 @@ export default function SingerPage({ params }: { params: Params }) {
       </nav>
 
       <section id="about" className="py-12">
-        <h2 className="display text-4xl text-burgundy-deep">About</h2>
-        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-ink-soft">{singer.bio}</p>
+        <h2 className="display text-4xl text-[#e8e6e3]">About</h2>
+        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-[#a09a8e]">{singer.bio}</p>
       </section>
 
       <section id="ghazals" className="py-8">
-        <h2 className="display mb-6 text-4xl text-burgundy-deep">Essential Ghazals</h2>
+        <h2 className="display mb-6 text-4xl text-[#e8e6e3]">Essential Ghazals</h2>
         <ArchiveList items={ghazals} includeExtras extraSingerId={singer.id} />
       </section>
 
       {albums.length > 0 && (
         <section id="albums" className="py-8">
-          <h2 className="display mb-6 text-4xl text-burgundy-deep">Albums</h2>
+          <h2 className="display mb-6 text-4xl text-[#e8e6e3]">Albums</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
             {albums.map((a) => (
-              <li key={a.id} className="border border-burgundy/15 px-4 py-3">
-                <Link href={`/albums/${a.slug}`} className="font-display text-2xl hover:text-burgundy">
+              <li key={a.id} className="border border-[#2a2a35] bg-[#121218] px-4 py-3">
+                <Link href={`/albums/${a.slug}`} className="font-display text-2xl hover:text-[#b08d3e]">
                   {a.title}
                 </Link>
-                <p className="font-mono text-[10px] tracking-[0.16em] text-ink-ghost">
+                <p className="font-mono text-[10px] tracking-[0.16em] text-[#a09a8e]/60">
                   {a.year ?? "Year unrecorded"}
                   {a.note ? ` · ${a.note}` : ""}
                 </p>
@@ -112,13 +112,13 @@ export default function SingerPage({ params }: { params: Params }) {
 
       {poets.length > 0 && (
         <section id="poets" className="py-8">
-          <h2 className="display mb-6 text-4xl text-burgundy-deep">Poets</h2>
+          <h2 className="display mb-6 text-4xl text-[#e8e6e3]">Poets</h2>
           <div className="flex flex-wrap gap-3">
             {poets.map((p) => (
               <Link
                 key={p.id}
                 href={`/poets/${p.slug}`}
-                className="border border-burgundy/20 px-4 py-2 font-display text-lg hover:border-burgundy/50"
+                className="border border-[#2a2a35] bg-[#121218] px-4 py-2 font-display text-lg hover:border-[#b08d3e]/50 hover:text-[#b08d3e]"
               >
                 {p.name}
               </Link>
@@ -128,10 +128,10 @@ export default function SingerPage({ params }: { params: Params }) {
       )}
 
       <section id="related" className="py-8">
-        <h2 className="display mb-6 text-4xl text-burgundy-deep">Related Voices</h2>
+        <h2 className="display mb-6 text-4xl text-[#e8e6e3]">Related Voices</h2>
         <div className="flex flex-wrap gap-4">
           {related.map((s) => (
-            <Link key={s.id} href={`/singers/${s.slug}`} className="font-display text-xl italic hover:text-burgundy">
+            <Link key={s.id} href={`/singers/${s.slug}`} className="font-display text-xl italic hover:text-[#b08d3e]">
               {s.name}
             </Link>
           ))}

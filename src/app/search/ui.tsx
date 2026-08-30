@@ -14,12 +14,12 @@ export function SearchForm({ defaultValue }: { defaultValue: string }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex border border-burgundy/30 bg-ivory-soft">
+    <form onSubmit={onSubmit} className="flex border border-[#2a2a35] bg-[#121218]">
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder="Ranjish, Faraz, Mehfil, 1970s…"
-        className="w-full bg-transparent px-4 py-3 font-display text-xl italic outline-none"
+        className="w-full bg-transparent px-4 py-3 font-display text-xl italic text-[#e8e6e3] outline-none placeholder:text-[#a09a8e]/60"
       />
       <button type="submit" className="btn btn-solid rounded-none">
         Search

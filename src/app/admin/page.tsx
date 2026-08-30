@@ -10,8 +10,8 @@ export default function AdminPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
       <p className="kicker">The registrar</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep">Add a ghazal</h1>
-      <p className="mt-4 font-display text-lg italic text-ink-fade">
+      <h1 className="display mt-3 text-5xl text-[#e8e6e3]">Add a ghazal</h1>
+      <p className="mt-4 font-display text-lg italic text-[#a09a8e]">
         Thirty seconds. Title, singer, poet if known, a Spotify link if you have one. Leave the rest
         blank rather than guess. Entries are stored in this browser and appear in the archive at
         once. Connect Supabase to persist them for everyone.

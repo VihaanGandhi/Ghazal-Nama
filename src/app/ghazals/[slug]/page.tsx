@@ -43,30 +43,30 @@ export default function GhazalPage({ params }: { params: Params }) {
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <p className="kicker">Sleeve notes</p>
       <div className="mt-6 grid items-start gap-10 md:grid-cols-[minmax(0,0.9fr)_1.1fr]">
-        <div className="photo-plate">
+        <div className="relative overflow-hidden border border-[#2a2a35] bg-[#121218]">
           <CoverArt ghazal={ghazal} className="aspect-square" />
         </div>
         <div>
           {ghazal.titleUrdu ? (
-            <p className="urdu text-3xl text-burgundy/75">{ghazal.titleUrdu}</p>
+            <p className="urdu text-3xl text-[#b08d3e]/75">{ghazal.titleUrdu}</p>
           ) : null}
-          <h1 className="display mt-2 text-5xl uppercase text-burgundy-deep sm:text-6xl">
+          <h1 className="display mt-2 text-5xl uppercase text-[#e8e6e3] sm:text-6xl">
             {ghazal.title}
           </h1>
           <p className="mt-4 font-display text-2xl italic">
             {singer ? (
-              <Link href={`/singers/${singer.slug}`} className="hover:text-burgundy">
+              <Link href={`/singers/${singer.slug}`} className="hover:text-[#b08d3e]">
                 {singer.name}
               </Link>
             ) : null}
           </p>
           {ghazal.excerpt ? (
-            <p className="mt-6 font-display text-xl italic leading-relaxed text-ink-fade">
-              “{ghazal.excerpt}”
+            <p className="mt-6 font-display text-xl italic leading-relaxed text-[#a09a8e]">
+              &ldquo;{ghazal.excerpt}&rdquo;
             </p>
           ) : null}
 
-          <dl className="mt-8 space-y-3 border-y border-burgundy/20 py-6 font-mono text-[11px] tracking-[0.16em]">
+          <dl className="mt-8 space-y-3 border-y border-[#2a2a35] py-6 font-mono text-[11px] tracking-[0.16em]">
             <Row label="Poet">
               {poet ? <Link href={`/poets/${poet.slug}`}>{poet.name}</Link> : "Unrecorded"}
             </Row>
@@ -100,8 +100,8 @@ export default function GhazalPage({ params }: { params: Params }) {
       </div>
 
       <section className="mt-16">
-        <h2 className="display text-4xl text-burgundy-deep">About this Ghazal</h2>
-        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-ink-soft">
+        <h2 className="display text-4xl text-[#e8e6e3]">About this Ghazal</h2>
+        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-[#a09a8e]">
           {ghazal.description ??
             `${ghazal.title} is held in the Ghazal Nama ledger as a recording by ${
               singer?.name ?? "an unrecorded singer"
@@ -110,34 +110,34 @@ export default function GhazalPage({ params }: { params: Params }) {
       </section>
 
       {poet && (
-        <section className="mt-12 border border-burgundy/15 bg-ivory-soft/50 p-6">
+        <section className="mt-12 border border-[#2a2a35] bg-[#121218] p-6">
           <p className="kicker">The poet</p>
-          <h3 className="mt-2 font-display text-3xl">
-            <Link href={`/poets/${poet.slug}`} className="hover:text-burgundy">
+          <h3 className="mt-2 font-display text-3xl text-[#e8e6e3]">
+            <Link href={`/poets/${poet.slug}`} className="hover:text-[#b08d3e]">
               {poet.name}
             </Link>
           </h3>
-          <p className="mt-3 max-w-2xl font-display italic text-ink-fade">{poet.bio}</p>
+          <p className="mt-3 max-w-2xl font-display italic text-[#a09a8e]">{poet.bio}</p>
         </section>
       )}
 
       {renditions.length > 0 && (
         <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">Other Renditions</h2>
+          <h2 className="display mb-4 text-4xl text-[#e8e6e3]">Other Renditions</h2>
           <GhazalList items={renditions} />
         </section>
       )}
 
       {more.length > 0 && singer && (
         <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">More by {singer.name}</h2>
+          <h2 className="display mb-4 text-4xl text-[#e8e6e3]">More by {singer.name}</h2>
           <GhazalList items={more} />
         </section>
       )}
 
       {similar.length > 0 && (
         <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">Similar Ghazals</h2>
+          <h2 className="display mb-4 text-4xl text-[#e8e6e3]">Similar Ghazals</h2>
           <GhazalList items={similar} />
         </section>
       )}
@@ -148,8 +148,8 @@ export default function GhazalPage({ params }: { params: Params }) {
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[7rem_1fr] gap-4">
-      <dt className="text-burgundy">{label}</dt>
-      <dd className="text-ink">{children}</dd>
+      <dt className="text-[#b08d3e]">{label}</dt>
+      <dd className="text-[#e8e6e3]">{children}</dd>
     </div>
   );
 }

@@ -52,7 +52,7 @@ export function AdminForm({
   };
 
   return (
-    <form onSubmit={onSubmit} className="mt-10 space-y-5 border border-burgundy/20 bg-ivory-soft/60 p-6">
+    <form onSubmit={onSubmit} className="mt-10 space-y-5 border border-[#2a2a35] bg-[#121218] p-6">
       <Field label="Title" name="title" required placeholder="Ranjish Hi Sahi" />
       <label className="block">
         <span className="kicker">Singer</span>
@@ -120,8 +120,8 @@ export function AdminForm({
         Enter in the ledger
       </button>
       {done ? (
-        <p className="font-display italic text-burgundy">
-          “{done}” is in the archive. {extras.length} local addition{extras.length === 1 ? "" : "s"} in this browser.
+        <p className="font-display italic text-[#b08d3e]">
+          &ldquo;{done}&rdquo; is in the archive. {extras.length} local addition{extras.length === 1 ? "" : "s"} in this browser.
         </p>
       ) : null}
     </form>

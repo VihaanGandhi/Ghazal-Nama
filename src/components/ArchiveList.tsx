@@ -27,7 +27,7 @@ export function ArchiveList({
   const rows = [...extraItems, ...items];
 
   return (
-    <div className="border-y border-burgundy/20">
+    <div className="border-y border-[#2a2a35]">
       {rows.map((g, i) => {
         const singer = singerOf(g);
         const poet = poetOf(g);
@@ -35,28 +35,28 @@ export function ArchiveList({
         return (
           <div
             key={g.id}
-            className="archive-row grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-burgundy/10 px-2 py-3 sm:grid-cols-[3rem_1fr_auto] sm:gap-5 sm:px-3"
+            className="archive-row grid grid-cols-[auto_1fr_auto] items-center gap-3 border-b border-[#2a2a35]/50 px-2 py-3 sm:grid-cols-[3rem_1fr_auto] sm:gap-5 sm:px-3"
           >
-            <span className="font-mono text-xs text-burgundy/70">{padCatalog(start + i)}</span>
+            <span className="font-mono text-xs text-[#b08d3e]/70">{padCatalog(start + i)}</span>
             <div className="min-w-0">
               {g.id.startsWith("local-") ? (
                 <p className="font-display text-xl leading-tight sm:text-2xl">{g.title}</p>
               ) : (
-              <Link href={`/ghazals/${g.slug}`} className="font-display text-xl leading-tight hover:text-burgundy sm:text-2xl">
+              <Link href={`/ghazals/${g.slug}`} className="font-display text-xl leading-tight hover:text-[#b08d3e] sm:text-2xl">
                 {g.title}
               </Link>
               )}
-              <p className="mt-1 truncate font-mono text-[10px] tracking-[0.14em] text-ink-fade">
+              <p className="mt-1 truncate font-mono text-[10px] tracking-[0.14em] text-[#a09a8e]">
                 {singer ? (
-                  <Link href={`/singers/${singer.slug}`} className="hover:text-burgundy">
+                  <Link href={`/singers/${singer.slug}`} className="hover:text-[#b08d3e]">
                     {singer.name}
                   </Link>
                 ) : (
                   "—"
                 )}
-                <span className="mx-2 text-gold/70">·</span>
+                <span className="mx-2 text-[#b08d3e]/50">·</span>
                 {poet ? (
-                  <Link href={`/poets/${poet.slug}`} className="hover:text-burgundy">
+                  <Link href={`/poets/${poet.slug}`} className="hover:text-[#b08d3e]">
                     {poet.name}
                   </Link>
                 ) : (
@@ -64,22 +64,22 @@ export function ArchiveList({
                 )}
                 {showEra && g.era ? (
                   <>
-                    <span className="mx-2 hidden text-gold/70 sm:inline">·</span>
-                    <Link href={`/eras/${g.era}`} className="hidden hover:text-burgundy sm:inline">
+                    <span className="mx-2 hidden text-[#b08d3e]/50 sm:inline">·</span>
+                    <Link href={`/eras/${g.era}`} className="hidden hover:text-[#b08d3e] sm:inline">
                       {g.era}
                     </Link>
                   </>
                 ) : null}
                 {album ? (
                   <>
-                    <span className="mx-2 hidden text-gold/70 md:inline">·</span>
+                    <span className="mx-2 hidden text-[#b08d3e]/50 md:inline">·</span>
                     <span className="hidden md:inline">{album.title}</span>
                   </>
                 ) : null}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <span className="hidden font-mono text-[10px] tracking-[0.16em] text-ink-ghost sm:inline">
+              <span className="hidden font-mono text-[10px] tracking-[0.16em] text-[#a09a8e]/60 sm:inline">
                 {g.duration ?? "—:—"}
               </span>
               <PlayButton ghazal={g} />

@@ -14,10 +14,10 @@ export function SectionHeader({
   return (
     <header className={`mb-10 ${align === "center" ? "text-center" : "text-left"}`}>
       {kicker ? <p className="kicker mb-3">{kicker}</p> : null}
-      <h2 className="display text-4xl text-burgundy-deep sm:text-5xl">{title}</h2>
+      <h2 className="display text-4xl text-[#e8e6e3] sm:text-5xl">{title}</h2>
       {subtitle ? (
         <p
-          className={`mt-4 max-w-2xl font-display text-lg italic text-ink-fade ${
+          className={`mt-4 max-w-2xl font-display text-lg italic text-[#a09a8e] ${
             align === "center" ? "mx-auto" : ""
           }`}
         >

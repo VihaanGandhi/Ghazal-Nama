@@ -20,7 +20,7 @@ export default function ListenPage() {
         <div className="flex flex-col items-center">
           <p className="kicker mb-6">On air</p>
           <VinylDisc className="h-56 w-56" label="SIDE A" />
-          <p className="mt-6 font-mono text-[10px] tracking-[0.28em] text-burgundy">
+          <p className="mt-6 font-mono text-[10px] tracking-[0.28em] text-[#b08d3e]">
             GHAZAL NAMA RADIO  ·  LATE NIGHT
           </p>
           <div className="mt-8 w-full">
@@ -28,12 +28,12 @@ export default function ListenPage() {
           </div>
         </div>
         <div>
-          <h1 className="display text-5xl text-burgundy-deep">Listen</h1>
-          <p className="mt-4 max-w-xl font-display text-xl italic text-ink-fade">
+          <h1 className="display text-5xl text-[#e8e6e3]">Listen</h1>
+          <p className="mt-4 max-w-xl font-display text-xl italic text-[#a09a8e]">
             A programme, not a shuffle. Playback lives on Spotify; the sitting lives here.
           </p>
-          <p className="mt-6 font-display text-lg text-ink-soft">
-            Now on the turntable: <span className="italic">{featured.title}</span>
+          <p className="mt-6 font-display text-lg text-[#a09a8e]">
+            Now on the turntable: <span className="italic text-[#e8e6e3]">{featured.title}</span>
             {singer ? ` — ${singer.name}` : ""}.
           </p>
           <div className="mt-6">
@@ -42,7 +42,7 @@ export default function ListenPage() {
         </div>
       </div>
       <section className="mt-16">
-        <h2 className="display mb-6 text-4xl text-burgundy-deep">Tonight’s programme</h2>
+        <h2 className="display mb-6 text-4xl text-[#e8e6e3]">Tonight&apos;s programme</h2>
         <ArchiveList items={items} />
       </section>
     </div>
