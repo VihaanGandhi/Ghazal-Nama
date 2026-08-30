@@ -1,155 +1,202 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CoverArt } from "@/components/CoverArt";
-import { GhazalList } from "@/components/GhazalList";
-import { PlayButton } from "@/components/PlayButton";
-import { SpotifyButton } from "@/components/SpotifyButton";
+import { Divider, SectionLabel } from "@/components/Ornament";
+import { Reveal } from "@/components/Reveal";
+import { StagePlayer } from "@/components/StagePlayer";
+import { TrackList } from "@/components/TrackList";
 import {
   albumOf,
   getGhazal,
-  getGhazals,
   moreBySinger,
   otherRenditions,
   poetOf,
+  recordingOf,
   similarGhazals,
   singerOf,
 } from "@/lib/catalog";
+import { ghazals } from "@/data";
 import { ghazalListenUrl } from "@/lib/spotify";
 
-type Params = { slug: string };
+type Params = { params: { slug: string } };
 
 export function generateStaticParams() {
-  return getGhazals().map((g) => ({ slug: g.slug }));
+  return ghazals.map((g) => ({ slug: g.slug }));
 }
 
-export function generateMetadata({ params }: { params: Params }): Metadata {
-  const g = getGhazal(params.slug);
-  return { title: g ? g.title : "Ghazal" };
+export function generateMetadata({ params }: Params): Metadata {
+  const ghazal = getGhazal(params.slug);
+  if (!ghazal) return { title: "Recording not found" };
+  const singer = singerOf(ghazal);
+  return {
+    title: ghazal.title,
+    description: `${ghazal.title}${singer ? ` — ${singer.name}` : ""}. ${ghazal.description ?? ""}`,
+  };
 }
 
-export default function GhazalPage({ params }: { params: Params }) {
+export default function GhazalPage({ params }: Params) {
   const ghazal = getGhazal(params.slug);
   if (!ghazal) notFound();
+
   const singer = singerOf(ghazal);
   const poet = poetOf(ghazal);
   const album = albumOf(ghazal);
+  const recording = recordingOf(ghazal);
   const renditions = otherRenditions(ghazal);
-  const more = moreBySinger(ghazal);
-  const similar = similarGhazals(ghazal);
-  const listen = ghazalListenUrl(ghazal, singer?.name);
+  const more = moreBySinger(ghazal, 8);
+  const similar = similarGhazals(ghazal, 8);
+  const queueIds = [ghazal.id, ...more.map((g) => g.id), ...similar.map((g) => g.id)];
+
+  const facts: [string, React.ReactNode][] = [
+    ["Voice", singer ? <Link href={`/singers/${singer.slug}`}>{singer.name}</Link> : "—"],
+    ["Words", poet ? <Link href={`/poets/${poet.slug}`}>{poet.name}</Link> : "not attributed"],
+    ["Album", album ? <Link href={`/albums/${album.slug}`}>{album.title}</Link> : "—"],
+    ["Year", ghazal.year ? String(ghazal.year) : "—"],
+    ["Era", ghazal.era ? <Link href={`/eras/${ghazal.era}`}>{ghazal.era}</Link> : "—"],
+    ["Mood", ghazal.mood ? <Link href={`/moods/${ghazal.mood}`}>{ghazal.mood}</Link> : "—"],
+    ["Length", ghazal.duration ?? "—"],
+    [
+      "Source",
+      recording ? (
+        <a
+          href={`https://www.youtube.com/watch?v=${recording.youtubeId}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {recording.source}
+        </a>
+      ) : (
+        <a href={ghazalListenUrl(ghazal, singer?.name)} target="_blank" rel="noreferrer">
+          not confirmed — search
+        </a>
+      ),
+    ],
+  ];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <p className="kicker">Sleeve notes</p>
-      <div className="mt-6 grid items-start gap-10 md:grid-cols-[minmax(0,0.9fr)_1.1fr]">
-        <div className="photo-plate">
-          <CoverArt ghazal={ghazal} className="aspect-square" />
+    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+      <nav className="mb-10 flex items-center gap-2 font-mono text-[10px] uppercase tracking-wideish text-bone-faint">
+        <Link href="/archive" className="transition-colors hover:text-ember">
+          Archive
+        </Link>
+        <span>/</span>
+        {singer && (
+          <>
+            <Link href={`/singers/${singer.slug}`} className="transition-colors hover:text-ember">
+              {singer.name}
+            </Link>
+            <span>/</span>
+          </>
+        )}
+        <span className="text-bone-mute">{ghazal.title}</span>
+      </nav>
+
+      <div className="grid gap-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        {/* Sticky left: the stage */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <StagePlayer ghazal={ghazal} queueIds={queueIds} />
+
+          <dl className="panel mt-6 divide-y divide-bone/8">
+            {facts.map(([label, value]) => (
+              <div key={label} className="flex items-baseline justify-between gap-6 px-5 py-3">
+                <dt className="font-mono text-[10px] uppercase tracking-kicker text-bone-faint">
+                  {label}
+                </dt>
+                <dd className="text-right text-sm text-bone [&_a]:border-b [&_a]:border-bone/20 [&_a]:transition-colors hover:[&_a]:border-ember hover:[&_a]:text-ember-soft">
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
+
+        {/* Right: the poem and its company */}
         <div>
-          {ghazal.titleUrdu ? (
-            <p className="urdu text-3xl text-burgundy/75">{ghazal.titleUrdu}</p>
-          ) : null}
-          <h1 className="display mt-2 text-5xl uppercase text-burgundy-deep sm:text-6xl">
+          <p className="kicker mb-4">
+            {ghazal.mood ?? "ghazal"}
+            {ghazal.year ? ` · ${ghazal.year}` : ""}
+          </p>
+          <h1 className="display display-wonk text-[clamp(2.4rem,6vw,4.6rem)] leading-[0.94] text-bone">
             {ghazal.title}
           </h1>
-          <p className="mt-4 font-display text-2xl italic">
-            {singer ? (
-              <Link href={`/singers/${singer.slug}`} className="hover:text-burgundy">
-                {singer.name}
+
+          {ghazal.titleUrdu && (
+            <p className="urdu mt-6 text-3xl leading-[2.6] text-ember-soft/90">{ghazal.titleUrdu}</p>
+          )}
+
+          {ghazal.excerpt && (
+            <Reveal>
+              <blockquote className="mt-8 border-l border-ember/40 pl-6">
+                <p className="display display-wonk text-2xl italic leading-snug text-bone-mute sm:text-3xl">
+                  {ghazal.excerpt}
+                </p>
+              </blockquote>
+            </Reveal>
+          )}
+
+          {ghazal.description && (
+            <Reveal delay={80}>
+              <div className="mt-10 max-w-2xl space-y-5 text-[17px] leading-relaxed text-bone-mute">
+                <p>{ghazal.description}</p>
+              </div>
+            </Reveal>
+          )}
+
+          {singer && (
+            <Reveal delay={120}>
+              <Link
+                href={`/singers/${singer.slug}`}
+                className="group mt-12 flex items-center gap-5 border-t border-bone/10 pt-8"
+              >
+                <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-bone/15">
+                  {singer.photo && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={singer.photo}
+                      alt=""
+                      className="duotone h-full w-full object-cover transition-transform duration-[1200ms] ease-silk group-hover:scale-110"
+                    />
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span className="kicker block">{singer.honorific ?? "voice"}</span>
+                  <span className="display mt-1 block text-2xl text-bone transition-colors group-hover:text-ember-soft">
+                    {singer.name}
+                  </span>
+                  <span className="mt-1 block text-sm text-bone-faint">{singer.shortBio}</span>
+                </span>
               </Link>
-            ) : null}
-          </p>
-          {ghazal.excerpt ? (
-            <p className="mt-6 font-display text-xl italic leading-relaxed text-ink-fade">
-              “{ghazal.excerpt}”
-            </p>
-          ) : null}
+            </Reveal>
+          )}
 
-          <dl className="mt-8 space-y-3 border-y border-burgundy/20 py-6 font-mono text-[11px] tracking-[0.16em]">
-            <Row label="Poet">
-              {poet ? <Link href={`/poets/${poet.slug}`}>{poet.name}</Link> : "Unrecorded"}
-            </Row>
-            <Row label="Singer">
-              {singer ? <Link href={`/singers/${singer.slug}`}>{singer.name}</Link> : "Unrecorded"}
-            </Row>
-            <Row label="Era">
-              {ghazal.era ? <Link href={`/eras/${ghazal.era}`}>{ghazal.era}</Link> : "Unrecorded"}
-            </Row>
-            <Row label="Mood">
-              {ghazal.mood ? (
-                <Link href={`/moods/${ghazal.mood}`} className="capitalize">
-                  {ghazal.mood}
-                </Link>
-              ) : (
-                "Unrecorded"
-              )}
-            </Row>
-            <Row label="Year">{ghazal.year ?? "Unrecorded"}</Row>
-            <Row label="Album">
-              {album ? <Link href={`/albums/${album.slug}`}>{album.title}</Link> : "Unrecorded"}
-            </Row>
-            <Row label="Duration">{ghazal.duration ?? "Unrecorded"}</Row>
-          </dl>
+          {renditions.length > 0 && (
+            <section className="mt-16">
+              <SectionLabel
+                index="02"
+                title="Other renditions"
+                note="The same poem, carried by another voice."
+              />
+              <TrackList ids={renditions.map((g) => g.id)} showYear />
+            </section>
+          )}
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <PlayButton ghazal={ghazal} className="h-14 w-14" />
-            <SpotifyButton href={listen} variant="solid" />
-          </div>
+          {more.length > 0 && (
+            <section className="mt-16">
+              <SectionLabel index="03" title={`More by ${singer?.name ?? "this voice"}`} />
+              <TrackList ids={more.map((g) => g.id)} showPoet />
+            </section>
+          )}
+
+          {similar.length > 0 && (
+            <section className="mt-16">
+              <SectionLabel index="04" title="Kept nearby" note="Same weather, same poets." />
+              <TrackList ids={similar.map((g) => g.id)} />
+            </section>
+          )}
         </div>
       </div>
 
-      <section className="mt-16">
-        <h2 className="display text-4xl text-burgundy-deep">About this Ghazal</h2>
-        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-ink-soft">
-          {ghazal.description ??
-            `${ghazal.title} is held in the Ghazal Nama ledger as a recording by ${
-              singer?.name ?? "an unrecorded singer"
-            }${poet ? `, from a ghazal by ${poet.name}` : ""}. Where album, year or duration could not be confirmed, the field has been left empty rather than guessed.`}
-        </p>
-      </section>
-
-      {poet && (
-        <section className="mt-12 border border-burgundy/15 bg-ivory-soft/50 p-6">
-          <p className="kicker">The poet</p>
-          <h3 className="mt-2 font-display text-3xl">
-            <Link href={`/poets/${poet.slug}`} className="hover:text-burgundy">
-              {poet.name}
-            </Link>
-          </h3>
-          <p className="mt-3 max-w-2xl font-display italic text-ink-fade">{poet.bio}</p>
-        </section>
-      )}
-
-      {renditions.length > 0 && (
-        <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">Other Renditions</h2>
-          <GhazalList items={renditions} />
-        </section>
-      )}
-
-      {more.length > 0 && singer && (
-        <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">More by {singer.name}</h2>
-          <GhazalList items={more} />
-        </section>
-      )}
-
-      {similar.length > 0 && (
-        <section className="mt-12">
-          <h2 className="display mb-4 text-4xl text-burgundy-deep">Similar Ghazals</h2>
-          <GhazalList items={similar} />
-        </section>
-      )}
-    </div>
-  );
-}
-
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-[7rem_1fr] gap-4">
-      <dt className="text-burgundy">{label}</dt>
-      <dd className="text-ink">{children}</dd>
+      <Divider className="mt-20" />
     </div>
   );
 }

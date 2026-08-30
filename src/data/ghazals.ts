@@ -21,7 +21,7 @@ const seeds: Seed[] = [
   {
     title: "Hothon Se Chhoo Lo Tum",
     singer: "jagjit-singh",
-    poet: "shiv-kumar-batalvi",
+    poet: "indeevar",
     era: "1980s",
     mood: "romance",
     year: 1981,
@@ -30,7 +30,7 @@ const seeds: Seed[] = [
     urdu: "ہونٹوں سے چھو لو تم",
     featured: true,
     description:
-      "From Prem Geet (1981), this remains the recording through which many listeners first meet Jagjit Singh — a Punjabi poet’s hunger, sung as a vow.",
+      "From Prem Geet (1981), this remains the recording through which many listeners first meet Jagjit Singh — Indeevar’s invitation, sung as a vow.",
   },
   {
     title: "Tum Itna Jo Muskura Rahe Ho",

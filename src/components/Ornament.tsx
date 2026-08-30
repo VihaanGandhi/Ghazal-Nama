@@ -1,61 +1,98 @@
-export function Crescent({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M13.2 3.1a8.8 8.8 0 1 0 7.4 13.6A9 9 0 0 1 13.2 3.1Z" />
-    </svg>
-  );
-}
+import { classNames } from "@/lib/utils";
 
-export function DiamondRule({ className = "" }: { className?: string }) {
-  return (
-    <div className={`flex items-center gap-3 text-gold ${className}`} aria-hidden>
-      <span className="h-px flex-1 bg-gradient-to-r from-transparent to-burgundy/40" />
-      <span className="text-[9px] tracking-[0.4em]">◆</span>
-      <span className="h-px flex-1 bg-gradient-to-l from-transparent to-burgundy/40" />
-    </div>
-  );
-}
-
-export function CornerFrame({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`relative ${className}`}>
-      <span className="pointer-events-none absolute left-2 top-2 h-6 w-6 border-l border-t border-gold/60" />
-      <span className="pointer-events-none absolute right-2 top-2 h-6 w-6 border-r border-t border-gold/60" />
-      <span className="pointer-events-none absolute bottom-2 left-2 h-6 w-6 border-b border-l border-gold/60" />
-      <span className="pointer-events-none absolute bottom-2 right-2 h-6 w-6 border-b border-r border-gold/60" />
-      {children}
-    </div>
-  );
-}
-
-export function VinylDisc({
-  spinning = true,
-  className = "h-64 w-64",
-  label = "GHAZAL NAMA",
+export function Platter({
+  className = "h-40 w-40",
+  spinning = false,
+  label,
 }: {
-  spinning?: boolean;
   className?: string;
+  spinning?: boolean;
   label?: string;
 }) {
   return (
-    <div className={`relative ${className}`}>
+    <div className={classNames("relative", className)}>
       <div
-        className={`absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,#111_0%,#111_28%,#1a1a1a_29%,#0c0c0c_100%)] shadow-sleeve ${
-          spinning ? "animate-vinyl" : ""
-        }`}
+        className={classNames(
+          "absolute inset-0 rounded-full border border-bone/10",
+          spinning && "animate-platter"
+        )}
         style={{
-          backgroundImage:
-            "repeating-radial-gradient(circle at center, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 28%)",
+          background:
+            "repeating-radial-gradient(circle at 50% 50%, rgba(243,237,227,0.07) 0 1px, transparent 1px 5px)",
         }}
-      >
-        <div className="absolute inset-[31%] rounded-full border border-gold/40 bg-gradient-to-br from-burgundy to-burgundy-deep shadow-inner">
-          <div className="flex h-full flex-col items-center justify-center px-2 text-center">
-            <span className="font-mono text-[8px] tracking-[0.28em] text-gold-pale">EST. ARCHIVE</span>
-            <span className="mt-1 font-display text-[11px] leading-tight tracking-wide text-ivory">{label}</span>
-          </div>
-        </div>
-        <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ivory/90" />
+      />
+      <div
+        className={classNames(
+          "absolute inset-[12%] rounded-full border border-bone/10",
+          spinning && "animate-platter"
+        )}
+        style={{ animationDuration: "6s" }}
+      />
+      <div
+        className={classNames(
+          "absolute inset-[34%] rounded-full",
+          spinning && "animate-platter"
+        )}
+        style={{
+          background:
+            "conic-gradient(from 0deg, rgba(232,162,76,0.9), rgba(200,107,123,0.5), rgba(111,162,143,0.4), rgba(232,162,76,0.9))",
+        }}
+      />
+      <div className="absolute inset-[46%] rounded-full bg-night" />
+      {label && (
+        <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-kicker text-bone-faint">
+          {label}
+        </span>
+      )}
+    </div>
+  );
+}
+
+export function Divider({ className = "" }: { className?: string }) {
+  return (
+    <div className={classNames("flex items-center gap-4", className)} aria-hidden>
+      <span className="h-px flex-1 bg-bone/10" />
+      <span className="rule-dot" />
+      <span className="h-px flex-1 bg-bone/10" />
+    </div>
+  );
+}
+
+export function LampGlow({ className = "" }: { className?: string }) {
+  return (
+    <div
+      aria-hidden
+      className={classNames(
+        "pointer-events-none absolute inset-x-0 top-0 h-[28rem] animate-breathe bg-lamp-glow",
+        className
+      )}
+    />
+  );
+}
+
+export function SectionLabel({
+  index,
+  title,
+  note,
+}: {
+  index: string;
+  title: string;
+  note?: string;
+}) {
+  return (
+    <div className="mb-10 flex items-end justify-between gap-6">
+      <div>
+        <p className="kicker mb-3">
+          <span className="text-bone-faint">{index}</span>
+          <span className="mx-3 text-bone-ghost">/</span>
+          {title}
+        </p>
       </div>
+      {note && (
+        <p className="hidden max-w-xs text-right font-mono text-[10px] uppercase leading-relaxed tracking-wideish text-bone-faint sm:block">
+          {note}
+        </p>
+      )}
     </div>
   );
 }

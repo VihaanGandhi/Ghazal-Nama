@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
 import { SiteShell } from "@/components/SiteShell";
-import "@fontsource/cormorant-garamond/400.css";
-import "@fontsource/cormorant-garamond/400-italic.css";
-import "@fontsource/cormorant-garamond/500.css";
-import "@fontsource/cormorant-garamond/500-italic.css";
-import "@fontsource/cormorant-garamond/600.css";
-import "@fontsource/cormorant-garamond/700.css";
-import "@fontsource/source-sans-3/400.css";
-import "@fontsource/source-sans-3/500.css";
-import "@fontsource/source-sans-3/600.css";
+import "@fontsource-variable/fraunces/full.css";
+import "@fontsource-variable/fraunces/full-italic.css";
+import "@fontsource-variable/inter";
 import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/noto-nastaliq-urdu/400.css";
@@ -17,14 +11,14 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Ghazal Nama — A Home for Timeless Ghazals",
+    default: "Ghazal Nama — where poetry finds a voice",
     template: "%s · Ghazal Nama",
   },
   description:
-    "A digital archive of South Asian ghazal — legendary voices, poets, and recordings. Where poetry finds a voice.",
+    "A living archive of South Asian ghazal: two hundred recordings catalogued across ten voices, with a listening room that actually plays.",
   openGraph: {
     title: "Ghazal Nama",
-    description: "A Home for Timeless Ghazals",
+    description: "A living archive of South Asian ghazal — catalogue, poets, eras, and a room that plays.",
     type: "website",
   },
 };

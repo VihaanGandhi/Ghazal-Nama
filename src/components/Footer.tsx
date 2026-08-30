@@ -1,57 +1,109 @@
 import Link from "next/link";
-import { Crescent, DiamondRule } from "./Ornament";
+import { ARCHIVE_TOTAL, getEras, getMoods, getSingers } from "@/lib/catalog";
+import { playableCount } from "@/lib/catalog";
+import { Mark } from "./Navbar";
 
 export function Footer() {
+  const singers = getSingers();
+  const moods = getMoods();
+  const eras = getEras();
+
   return (
-    <footer className="relative mt-20 border-t border-burgundy/20 bg-[#2a1c16] text-ivory">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="flex flex-col items-center text-center">
-          <Crescent className="h-5 w-5 text-gold" />
-          <p className="mt-4 font-display text-3xl tracking-[0.28em] sm:text-4xl">GHAZAL NAMA</p>
-          <p className="mt-3 font-display text-lg italic text-gold-mute">
-            A Home for Timeless Ghazals.
-          </p>
-          <DiamondRule className="mt-6 w-48 text-gold/70" />
+    <footer className="relative mt-24 border-t border-bone/10 bg-night-100/60">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div>
+            <div className="flex items-center gap-3 text-ember">
+              <Mark className="h-9 w-9" />
+              <span className="font-display text-2xl text-bone">Ghazal Nama</span>
+            </div>
+            <p className="lede mt-5 max-w-sm text-lg">
+              A room for the couplet: {ARCHIVE_TOTAL} recordings catalogued, {playableCount()}{" "}
+              confirmed in the listening room and ready to play.
+            </p>
+            <p className="mt-6 max-w-sm font-mono text-[10px] leading-relaxed uppercase tracking-wideish text-bone-faint">
+              Recordings play through their rights-holders&apos; own uploads. Nothing here is
+              stored, re-hosted or redistributed.
+            </p>
+          </div>
+
+          <div>
+            <p className="kicker mb-4">Voices</p>
+            <ul className="space-y-2">
+              {singers.slice(0, 6).map((singer) => (
+                <li key={singer.id}>
+                  <Link
+                    href={`/singers/${singer.slug}`}
+                    className="text-bone-mute transition-colors hover:text-ember-soft"
+                  >
+                    {singer.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="kicker mb-4">Moods</p>
+            <ul className="space-y-2">
+              {moods.slice(0, 6).map((mood) => (
+                <li key={mood.id}>
+                  <Link
+                    href={`/moods/${mood.id}`}
+                    className="text-bone-mute transition-colors hover:text-ember-soft"
+                  >
+                    {mood.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="kicker mb-4">The archive</p>
+            <ul className="space-y-2 text-bone-mute">
+              <li>
+                <Link href="/archive" className="transition-colors hover:text-ember-soft">
+                  All recordings
+                </Link>
+              </li>
+              <li>
+                <Link href="/eras" className="transition-colors hover:text-ember-soft">
+                  Eras ({eras.length})
+                </Link>
+              </li>
+              <li>
+                <Link href="/collections" className="transition-colors hover:text-ember-soft">
+                  Collections
+                </Link>
+              </li>
+              <li>
+                <Link href="/listen" className="transition-colors hover:text-ember-soft">
+                  Tonight&apos;s programme
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="transition-colors hover:text-ember-soft">
+                  About &amp; method
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="transition-colors hover:text-ember-soft">
+                  Registrar
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <nav className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.24em] text-ivory/70">
-          <Link href="/explore" className="hover:text-gold-pale">
-            EXPLORE
-          </Link>
-          <Link href="/singers" className="hover:text-gold-pale">
-            SINGERS
-          </Link>
-          <Link href="/poets" className="hover:text-gold-pale">
-            POETS
-          </Link>
-          <Link href="/collections" className="hover:text-gold-pale">
-            COLLECTIONS
-          </Link>
-          <Link href="/about" className="hover:text-gold-pale">
-            ABOUT
-          </Link>
-          <Link href="/archive" className="hover:text-gold-pale">
-            ARCHIVE
-          </Link>
-          <Link href="/admin" className="hover:text-gold-pale">
-            REGISTRAR
-          </Link>
-          <a
-            href="https://open.spotify.com/search/ghazal"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-gold-pale"
-          >
-            SPOTIFY
-          </a>
-        </nav>
-        <p className="mx-auto mt-10 max-w-2xl text-center font-display text-sm italic leading-relaxed text-ivory/55">
-          Ghazal Nama does not host copyrighted recordings. Listen on Spotify. Portraiture is
-          archival in spirit — generated stills and typographic plates, not licensed publicity
-          photographs. Metadata is left empty where it could not be confirmed.
-        </p>
-        <p className="mt-6 text-center font-mono text-[10px] tracking-[0.2em] text-ivory/40">
-          © {new Date().getFullYear()} GHAZAL NAMA · VOL. I · THE POETRY THAT STAYED
-        </p>
+
+        <div className="hairline mt-14" />
+
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-mono text-[10px] uppercase tracking-wideish text-bone-faint">
+            Ghazal Nama · where poetry finds a voice
+          </p>
+          <p className="urdu text-base text-bone-mute/80">غزل نامہ</p>
+        </div>
       </div>
     </footer>
   );

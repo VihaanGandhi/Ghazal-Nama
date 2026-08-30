@@ -1,72 +1,77 @@
-import type { Ghazal, Mood } from "@/lib/types";
-import { hashString } from "@/lib/utils";
+import type { Ghazal } from "@/lib/types";
+import { classNames } from "@/lib/utils";
 
-const palettes: Record<Mood | "default", [string, string, string]> = {
-  midnight: ["#241820", "#3d2a38", "#c4a574"],
-  heartbreak: ["#3f141c", "#6b2430", "#e4d3a4"],
-  ishq: ["#4a241c", "#8a3a44", "#e4d3a4"],
-  mehfil: ["#3d2a14", "#7a5e28", "#f4ead6"],
-  baarish: ["#243028", "#5e5c3e", "#dcc9a0"],
-  tanhaai: ["#2a241c", "#5c4630", "#c4a574"],
-  romance: ["#4a2830", "#9a5c62", "#f4ead6"],
-  poetry: ["#1c1612", "#3d3226", "#e4d3a4"],
-  default: ["#3f141c", "#6b2430", "#c4a574"],
-};
+/**
+ * Covers are generated, not borrowed: a deterministic plate per recording,
+ * keyed off the title so a ghazal always looks like itself.
+ */
+function hash(value: string): number {
+  let h = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    h = (h * 31 + value.charCodeAt(i)) % 100000;
+  }
+  return h;
+}
+
+const PALETTES = [
+  ["#e8a24c", "#8e3a4a"],
+  ["#6fa28f", "#2c251e"],
+  ["#c86b7b", "#7c4a17"],
+  ["#f2c57c", "#3f6a5c"],
+  ["#8e3a4a", "#1b1714"],
+  ["#e8a24c", "#3f6a5c"],
+];
 
 export function CoverArt({
   ghazal,
   className = "",
+  showTitle = false,
 }: {
   ghazal: Ghazal;
   className?: string;
+  showTitle?: boolean;
 }) {
-  const [a, b, c] = palettes[ghazal.mood ?? "default"];
-  const tilt = (hashString(ghazal.id) % 7) - 3;
+  const seed = hash(ghazal.id + ghazal.title);
+  const [a, b] = PALETTES[seed % PALETTES.length];
+  const angle = seed % 360;
+  const rings = 3 + (seed % 4);
 
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
-      style={{
-        background: `linear-gradient(160deg, ${a} 0%, ${b} 55%, ${a} 100%)`,
-      }}
+      className={classNames("relative overflow-hidden rounded-[2px] bg-night-200", className)}
+      aria-hidden
     >
       <div
-        className="absolute inset-3 border"
-        style={{ borderColor: `${c}55` }}
+        className="absolute inset-0"
+        style={{ background: `linear-gradient(${angle}deg, ${a}33, ${b}66 60%, #0a0908)` }}
       />
-      <div
-        className="absolute inset-5 border"
-        style={{ borderColor: `${c}22` }}
-      />
-      <div
-        className="absolute -right-8 -top-8 h-32 w-32 rounded-full opacity-20"
-        style={{
-          background: `radial-gradient(circle, ${c}, transparent 70%)`,
-          transform: `rotate(${tilt}deg)`,
-        }}
-      />
-      <div className="relative flex h-full flex-col justify-between p-5">
-        <p className="font-mono text-[9px] tracking-[0.32em] text-ivory/60">
-          GHAZAL NAMA · SLEEVE
-        </p>
-        <div>
-          <p className="font-display text-2xl leading-tight text-ivory sm:text-3xl">
-            {ghazal.title}
-          </p>
-          {ghazal.titleUrdu ? (
-            <p className="urdu mt-2 text-lg text-gold-pale/80">{ghazal.titleUrdu}</p>
-          ) : null}
-        </div>
-        <div className="flex items-end justify-between">
-          <p className="font-mono text-[10px] tracking-[0.22em] text-gold-mute">
-            {ghazal.era ?? "ARCHIVE"}
-          </p>
-          <span
-            className="h-8 w-8 rounded-full border"
-            style={{ borderColor: `${c}66`, background: "rgba(0,0,0,0.25)" }}
+      <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+        {Array.from({ length: rings }).map((_, i) => (
+          <circle
+            key={i}
+            cx={28 + (seed % 44)}
+            cy={24 + (seed % 52)}
+            r={12 + i * 13}
+            fill="none"
+            stroke={a}
+            strokeOpacity={0.28 - i * 0.04}
+            strokeWidth="0.5"
           />
+        ))}
+        <path
+          d={`M0 ${70 + (seed % 18)} Q 30 ${54 + (seed % 20)}, 60 ${72 + (seed % 12)} T 100 ${64 + (seed % 14)}`}
+          fill="none"
+          stroke={b}
+          strokeOpacity="0.5"
+          strokeWidth="0.7"
+        />
+      </svg>
+      <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_20%_10%,rgba(243,237,227,0.12),transparent_70%)]" />
+      {showTitle && (
+        <div className="absolute inset-0 flex flex-col justify-end p-3">
+          <span className="font-display text-sm leading-tight text-bone/90">{ghazal.title}</span>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,51 +1,71 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArchiveList } from "@/components/ArchiveList";
-import { ghazalsByEra, getEra, getEras, getSinger } from "@/lib/catalog";
-import { ERAS, type Era } from "@/lib/types";
+import { Divider, SectionLabel } from "@/components/Ornament";
+import { TrackList } from "@/components/TrackList";
+import { CollectionPlay } from "@/components/CollectionPlay";
+import { getEra, getEras, getEraSingers, ghazalsByEra } from "@/lib/catalog";
+import { recordings } from "@/data/recordings";
 
-type Params = { slug: string };
+type Params = { params: { slug: string } };
 
 export function generateStaticParams() {
-  return ERAS.map((e) => ({ slug: e }));
+  return getEras().map((e) => ({ slug: e.id }));
 }
 
-export function generateMetadata({ params }: { params: Params }): Metadata {
-  return { title: params.slug };
+export function generateMetadata({ params }: Params): Metadata {
+  const era = getEra(params.slug);
+  return { title: era ? `${era.label} ghazal` : "Era", description: era?.description ?? "" };
 }
 
-export default function EraPage({ params }: { params: Params }) {
+export default function EraPage({ params }: Params) {
   const era = getEra(params.slug);
   if (!era) notFound();
-  const items = ghazalsByEra(params.slug as Era);
+
+  const items = ghazalsByEra(era.id);
+  const playable = items.filter((g) => recordings[g.id]);
+  const eraSingers = getEraSingers(era.id);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <p className="kicker">The historical ledger</p>
-      <h1 className="display mt-3 text-6xl text-burgundy-deep">{era.label}</h1>
-      <p className="mt-4 max-w-2xl font-display text-xl italic text-ink-fade">{era.description}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        {era.singer_ids.map((id) => {
-          const s = getSinger(id);
-          if (!s) return null;
-          return (
-            <Link key={id} href={`/singers/${s.slug}`} className="border border-burgundy/20 px-3 py-1 font-display text-lg">
-              {s.name}
-            </Link>
-          );
-        })}
+    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <div className="grid items-end gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+        <div>
+          <p className="kicker mb-6">Era</p>
+          <h1 className="display display-wonk text-[clamp(4rem,14vw,11rem)] leading-[0.82] text-bone">
+            {era.label}
+          </h1>
+        </div>
+        <div>
+          <p className="lede text-xl">{era.description}</p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {eraSingers.map((singer) => (
+              <Link key={singer.id} href={`/singers/${singer.slug}`} className="btn btn-ghost">
+                {singer.name}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="mt-10">
-        <ArchiveList items={items} />
+
+      <div className="mt-10 flex flex-wrap items-center gap-6 font-mono text-[10px] uppercase tracking-wideish text-bone-faint">
+        <span>{items.length} recordings</span>
+        <span className="text-ember">{playable.length} in the listening room</span>
+        {playable[0] && <CollectionPlay ghazalId={playable[0].id} queueIds={items.map((g) => g.id)} />}
       </div>
-      <div className="mt-12 flex flex-wrap gap-3 font-mono text-[10px] tracking-[0.2em] text-burgundy">
-        {getEras().map((e) => (
-          <Link key={e.id} href={`/eras/${e.id}`} className={e.id === era.id ? "underline" : "opacity-70"}>
-            {e.label}
-          </Link>
-        ))}
-      </div>
+
+      {playable.length > 0 && (
+        <section className="mt-16">
+          <SectionLabel index="01" title="In the listening room" />
+          <TrackList ids={playable.map((g) => g.id)} />
+        </section>
+      )}
+
+      <section className="mt-16">
+        <SectionLabel index="02" title="The decade, catalogued" />
+        <TrackList ids={items.map((g) => g.id)} />
+      </section>
+
+      <Divider className="mt-20" />
     </div>
   );
 }

@@ -1,142 +1,165 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArchiveList } from "@/components/ArchiveList";
-import { Portrait } from "@/components/Portrait";
-import { SpotifyButton } from "@/components/SpotifyButton";
+import { Divider, SectionLabel } from "@/components/Ornament";
+import { Reveal } from "@/components/Reveal";
+import { TrackList } from "@/components/TrackList";
+import { PoetCard } from "@/components/Cards";
 import {
   albumsForSinger,
-  ghazalsBySinger,
   getSinger,
   getSingers,
+  ghazalsBySinger,
   poetsForSinger,
-  relatedSingers,
 } from "@/lib/catalog";
-import { singerListenUrl } from "@/lib/spotify";
+import { recordings } from "@/data/recordings";
+import { singers } from "@/data";
 
-type Params = { slug: string };
+type Params = { params: { slug: string } };
 
 export function generateStaticParams() {
   return getSingers().map((s) => ({ slug: s.slug }));
 }
 
-export function generateMetadata({ params }: { params: Params }): Metadata {
+export function generateMetadata({ params }: Params): Metadata {
   const singer = getSinger(params.slug);
-  return { title: singer?.name ?? "Singer" };
+  return {
+    title: singer?.name ?? "Voice",
+    description: singer?.shortBio ?? "",
+  };
 }
 
-export default function SingerPage({ params }: { params: Params }) {
+export default function SingerPage({ params }: Params) {
   const singer = getSinger(params.slug);
   if (!singer) notFound();
-  const ghazals = ghazalsBySinger(singer.id);
+
+  const items = ghazalsBySinger(singer.id);
+  const playable = items.filter((g) => recordings[g.id]);
   const poets = poetsForSinger(singer.id);
   const albums = albumsForSinger(singer.id);
-  const related = relatedSingers(singer);
+  const others = getSingers().filter((s) => s.id !== singer.id).slice(0, 4);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <div className="grid items-start gap-10 md:grid-cols-[minmax(0,0.85fr)_1.15fr]">
-        <div className="photo-plate -rotate-[0.5deg]">
-          <Portrait src={singer.photo} name={singer.name} className="aspect-[4/5]" />
+    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+      <header className="grid items-end gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <div className="relative">
+          <div className="relative aspect-[4/5] w-full overflow-hidden border border-bone/10">
+            {singer.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={singer.photo}
+                alt={singer.name}
+                className="duotone h-full w-full object-cover mask-fade-b"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-night-200 font-display text-8xl text-bone-faint">
+                {singer.name.charAt(0)}
+              </div>
+            )}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(232,162,76,0.18),transparent_70%)]" />
+          </div>
+          <dl className="mt-6 grid grid-cols-3 gap-px border border-bone/10 bg-bone/10">
+            {[
+              ["born", singer.born ?? "—"],
+              ["origin", singer.origin ?? "—"],
+              ["era", singer.era],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-night px-4 py-4">
+                <dt className="font-mono text-[9px] uppercase tracking-kicker text-bone-faint">{k}</dt>
+                <dd className="mt-1.5 font-display text-lg text-bone">{v}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
+
         <div>
-          <p className="kicker">{singer.honorific}</p>
-          <h1 className="display mt-3 text-5xl uppercase tracking-wide text-burgundy-deep sm:text-6xl">
+          <p className="kicker mb-5">{singer.honorific ?? "voice"}</p>
+          <h1 className="display display-wonk text-[clamp(2.8rem,8vw,6rem)] leading-[0.9] text-bone">
             {singer.name}
           </h1>
-          <p className="mt-4 font-display text-2xl italic text-ink-fade">{singer.shortBio}</p>
-          <p className="mt-6 max-w-xl font-display text-lg leading-relaxed text-ink-soft">
-            {singer.bio}
-          </p>
-          <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-3 font-mono text-[10px] tracking-[0.18em] text-ink-fade">
-            <div>
-              <dt className="text-burgundy">ERA</dt>
-              <dd className="mt-1 text-ink">{singer.era}</dd>
+          <p className="lede mt-6 text-xl sm:text-2xl">{singer.shortBio}</p>
+          <Reveal delay={100}>
+            <div className="mt-8 max-w-2xl space-y-5 text-[17px] leading-relaxed text-bone-mute">
+              <p>{singer.bio}</p>
             </div>
-            {singer.born ? (
-              <div>
-                <dt className="text-burgundy">BORN</dt>
-                <dd className="mt-1 text-ink">
-                  {singer.born}
-                  {singer.died ? ` – ${singer.died}` : ""}
-                </dd>
-              </div>
-            ) : null}
-            <div>
-              <dt className="text-burgundy">IN THE LEDGER</dt>
-              <dd className="mt-1 text-ink">{ghazals.length} ghazals</dd>
-            </div>
-          </dl>
-          <div className="mt-8">
-            <SpotifyButton href={singerListenUrl(singer)} label="Play All on Spotify" variant="solid" />
+          </Reveal>
+          <div className="mt-8 flex flex-wrap gap-6 font-mono text-[10px] uppercase tracking-wideish text-bone-faint">
+            <span>{items.length} catalogued</span>
+            <span className="text-ember">{playable.length} in the listening room</span>
+            <span>{poets.length} poets</span>
+            <span>{albums.length} albums</span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <nav className="mt-14 flex flex-wrap gap-5 border-y border-burgundy/20 py-3 font-mono text-[10px] tracking-[0.22em] text-burgundy">
-        <a href="#about">ABOUT</a>
-        <a href="#ghazals">ESSENTIAL GHAZALS</a>
-        <a href="#albums">ALBUMS</a>
-        <a href="#poets">POETS</a>
-        <a href="#related">RELATED VOICES</a>
-      </nav>
+      {playable.length > 0 && (
+        <section className="mt-24">
+          <SectionLabel
+            index="01"
+            title="In the listening room"
+            note="Confirmed recordings. These play where they sit."
+          />
+          <TrackList ids={playable.map((g) => g.id)} showPoet />
+        </section>
+      )}
 
-      <section id="about" className="py-12">
-        <h2 className="display text-4xl text-burgundy-deep">About</h2>
-        <p className="mt-4 max-w-3xl font-display text-lg leading-relaxed text-ink-soft">{singer.bio}</p>
+      <section className="mt-24">
+        <SectionLabel index="02" title="Everything catalogued" />
+        <TrackList ids={items.map((g) => g.id)} showPoet />
       </section>
 
-      <section id="ghazals" className="py-8">
-        <h2 className="display mb-6 text-4xl text-burgundy-deep">Essential Ghazals</h2>
-        <ArchiveList items={ghazals} includeExtras extraSingerId={singer.id} />
-      </section>
+      {poets.length > 0 && (
+        <section className="mt-24">
+          <SectionLabel index="03" title="Poets in this voice" />
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {poets.slice(0, 8).map((poet) => (
+              <PoetCard key={poet.id} poet={poet} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {albums.length > 0 && (
-        <section id="albums" className="py-8">
-          <h2 className="display mb-6 text-4xl text-burgundy-deep">Albums</h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {albums.map((a) => (
-              <li key={a.id} className="border border-burgundy/15 px-4 py-3">
-                <Link href={`/albums/${a.slug}`} className="font-display text-2xl hover:text-burgundy">
-                  {a.title}
+        <section className="mt-24">
+          <SectionLabel index="04" title="Albums" />
+          <ul className="grid gap-px border border-bone/10 bg-bone/10 sm:grid-cols-2 lg:grid-cols-3">
+            {albums.map((album) => (
+              <li key={album.id}>
+                <Link
+                  href={`/albums/${album.slug}`}
+                  className="group flex h-full items-baseline justify-between gap-4 bg-night px-5 py-5 transition-colors hover:bg-night-200"
+                >
+                  <span className="font-display text-xl text-bone transition-colors group-hover:text-ember-soft">
+                    {album.title}
+                  </span>
+                  <span className="font-mono text-[10px] tabular-nums text-bone-faint">
+                    {album.year ?? "—"}
+                    {album.note ? ` · ${album.note}` : ""}
+                  </span>
                 </Link>
-                <p className="font-mono text-[10px] tracking-[0.16em] text-ink-ghost">
-                  {a.year ?? "Year unrecorded"}
-                  {a.note ? ` · ${a.note}` : ""}
-                </p>
               </li>
             ))}
           </ul>
         </section>
       )}
 
-      {poets.length > 0 && (
-        <section id="poets" className="py-8">
-          <h2 className="display mb-6 text-4xl text-burgundy-deep">Poets</h2>
-          <div className="flex flex-wrap gap-3">
-            {poets.map((p) => (
-              <Link
-                key={p.id}
-                href={`/poets/${p.slug}`}
-                className="border border-burgundy/20 px-4 py-2 font-display text-lg hover:border-burgundy/50"
-              >
-                {p.name}
+      <section className="mt-24">
+        <SectionLabel index="05" title="Other rooms" />
+        <ul className="flex flex-wrap gap-3">
+          {others.map((other) => (
+            <li key={other.id}>
+              <Link href={`/singers/${other.slug}`} className="btn btn-ghost">
+                {other.name}
               </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section id="related" className="py-8">
-        <h2 className="display mb-6 text-4xl text-burgundy-deep">Related Voices</h2>
-        <div className="flex flex-wrap gap-4">
-          {related.map((s) => (
-            <Link key={s.id} href={`/singers/${s.slug}`} className="font-display text-xl italic hover:text-burgundy">
-              {s.name}
-            </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
+
+      <Divider className="mt-20" />
+      <p className="mt-6 text-center font-mono text-[10px] uppercase tracking-wideish text-bone-faint">
+        {singers.length} voices in the archive
+      </p>
     </div>
   );
 }

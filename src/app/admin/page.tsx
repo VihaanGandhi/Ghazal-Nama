@@ -1,28 +1,36 @@
 import type { Metadata } from "next";
-import { AdminForm } from "./ui";
-import { albums } from "@/data";
-import { getPoets, getSingers } from "@/lib/catalog";
-import { ERAS, MOODS } from "@/lib/types";
+import { Registrar } from "./registrar";
+import { SectionLabel } from "@/components/Ornament";
 
-export const metadata: Metadata = { title: "Add a ghazal" };
+export const metadata: Metadata = { title: "Registrar" };
 
 export default function AdminPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-      <p className="kicker">The registrar</p>
-      <h1 className="display mt-3 text-5xl text-burgundy-deep">Add a ghazal</h1>
-      <p className="mt-4 font-display text-lg italic text-ink-fade">
-        Thirty seconds. Title, singer, poet if known, a Spotify link if you have one. Leave the rest
-        blank rather than guess. Entries are stored in this browser and appear in the archive at
-        once. Connect Supabase to persist them for everyone.
+    <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+      <SectionLabel index="01" title="Registrar" note="Local to this browser" />
+      <h1 className="display display-wonk max-w-3xl text-[clamp(2.4rem,6vw,4.5rem)] leading-[0.92] text-bone">
+        Propose a recording for the archive.
+      </h1>
+      <p className="lede mt-6 max-w-2xl text-xl">
+        Entries are kept in this browser only — the catalogue itself is versioned, so nothing here
+        changes what other visitors see. Add the source you found and it can be verified properly
+        before it enters the listening room.
       </p>
-      <AdminForm
-        singers={getSingers().map((s) => ({ id: s.id, name: s.name }))}
-        poets={getPoets().map((p) => ({ id: p.id, name: p.name }))}
-        albums={albums.map((a) => ({ id: a.id, title: a.title }))}
-        moods={[...MOODS]}
-        eras={[...ERAS]}
-      />
+
+      <div className="mt-14">
+        <Registrar />
+      </div>
+
+      <div className="panel mt-14 p-6">
+        <p className="kicker mb-3">For the keeper of the archive</p>
+        <p className="max-w-2xl text-[16px] leading-relaxed text-bone-mute">
+          Confirmed recordings live in{" "}
+          <code className="font-mono text-sm text-ember-soft">src/data/recordings.ts</code>, keyed
+          by ghazal id, each with the channel or release it was verified against. Adding an entry
+          there is what puts a recording in the listening room — the rest of the site picks it up
+          automatically.
+        </p>
+      </div>
     </div>
   );
 }

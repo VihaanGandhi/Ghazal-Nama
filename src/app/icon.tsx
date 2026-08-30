@@ -10,13 +10,14 @@ export default function Icon() {
         style={{
           width: 32,
           height: 32,
-          background: "#6b2430",
-          color: "#e4d3a4",
+          background: "#0a0908",
+          color: "#e8a24c",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: 16,
+          fontSize: 15,
           fontFamily: "Georgia",
+          letterSpacing: "0.02em",
         }}
       >
         GN

@@ -1,4 +1,5 @@
 import { albums, collections, eras, ghazals, moods, poets, singers } from "@/data";
+import { recordings, type Recording } from "@/data/recordings";
 import type { Album, Collection, Era, Ghazal, Mood, Poet, Singer } from "./types";
 import { normalizeTitle } from "./utils";
 
@@ -38,6 +39,10 @@ export function getGhazal(slug: string): Ghazal | undefined {
   return ghazals.find((g) => g.slug === slug);
 }
 
+export function getGhazalById(id: string): Ghazal | undefined {
+  return ghazals.find((g) => g.id === id);
+}
+
 export function getFeaturedGhazal(): Ghazal {
   return ghazals.find((g) => g.slug === "ranjish-hi-sahi-mehdi-hassan") ?? ghazals[0];
 }
@@ -62,17 +67,18 @@ export function ghazalsByEra(era: Era): Ghazal[] {
   return ghazals.filter((g) => g.era === era);
 }
 
-export function singerOf(ghazal: Ghazal): Singer | undefined {
+export function singerOf(ghazal?: Ghazal | null): Singer | undefined {
+  if (!ghazal) return undefined;
   return singers.find((s) => s.id === ghazal.singer_id);
 }
 
-export function poetOf(ghazal: Ghazal): Poet | undefined {
-  if (!ghazal.poet_id) return undefined;
+export function poetOf(ghazal?: Ghazal | null): Poet | undefined {
+  if (!ghazal?.poet_id) return undefined;
   return poets.find((p) => p.id === ghazal.poet_id);
 }
 
-export function albumOf(ghazal: Ghazal): Album | undefined {
-  if (!ghazal.album_id) return undefined;
+export function albumOf(ghazal?: Ghazal | null): Album | undefined {
+  if (!ghazal?.album_id) return undefined;
   return albums.find((a) => a.id === ghazal.album_id);
 }
 
@@ -198,3 +204,64 @@ export function searchCatalog(query: string): {
 }
 
 export const ARCHIVE_TOTAL = ghazals.length;
+
+/* ————————————————————————————————
+   The listening room
+   ———————————————————————————————— */
+
+export function recordingOf(ghazal: Ghazal | undefined): Recording | undefined {
+  if (!ghazal) return undefined;
+  return recordings[ghazal.id];
+}
+
+export function isPlayable(ghazal: Ghazal): boolean {
+  return Boolean(recordings[ghazal.id]);
+}
+
+/** Ghazals with a confirmed recording, in archive order. */
+export function playableGhazals(): Ghazal[] {
+  return ghazals.filter((g) => Boolean(recordings[g.id]));
+}
+
+export function playableCount(): number {
+  return playableGhazals().length;
+}
+
+/**
+ * A queue for a page: playable tracks first so the room is never silent,
+ * then the rest of the list in its original order.
+ */
+export function asQueue(items: Ghazal[]): Ghazal[] {
+  const head = items.filter((g) => Boolean(recordings[g.id]));
+  const tail = items.filter((g) => !recordings[g.id]);
+  return [...head, ...tail];
+}
+
+export function firstPlayable(items: Ghazal[]): Ghazal | undefined {
+  return items.find((g) => Boolean(recordings[g.id]));
+}
+
+export function playableBySinger(singerId: string): Ghazal[] {
+  return ghazalsBySinger(singerId).filter((g) => Boolean(recordings[g.id]));
+}
+
+export function singersWithRecordings(limit = 10): { singer: Singer; ghazals: Ghazal[] }[] {
+  return singers
+    .map((singer) => ({ singer, ghazals: playableBySinger(singer.id) }))
+    .filter((entry) => entry.ghazals.length > 0)
+    .sort((a, b) => b.ghazals.length - a.ghazals.length)
+    .slice(0, limit);
+}
+
+/** The voices that define a decade. */
+export function getEraSingers(eraId: string): Singer[] {
+  const era = eras.find((e) => e.id === eraId);
+  if (!era) return [];
+  return era.singer_ids
+    .map((id) => singers.find((s) => s.id === id))
+    .filter((s): s is Singer => Boolean(s));
+}
+
+export function getSingerById(id: string): Singer | undefined {
+  return singers.find((s) => s.id === id);
+}

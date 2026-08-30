@@ -1,5 +1,6 @@
 import type { Collection, EraMeta, MoodMeta } from "@/lib/types";
 import { ghazals } from "./ghazals";
+import { recordings } from "./recordings";
 
 export const moods: MoodMeta[] = [
   {
@@ -123,6 +124,13 @@ function idsBy(pred: (g: (typeof ghazals)[number]) => boolean, limit = 12): stri
   return ghazals.filter(pred).slice(0, limit).map((g) => g.id);
 }
 
+/** Keeps a collection listenable: confirmed recordings float to the top. */
+function withRecordingsFirst(ids: string[]): string[] {
+  const playable = ids.filter((id) => Boolean(recordings[id]));
+  const rest = ids.filter((id) => !recordings[id]);
+  return [...playable, ...rest];
+}
+
 export const collections: Collection[] = [
   {
     id: "tonights-mehfil",
@@ -132,14 +140,16 @@ export const collections: Collection[] = [
     description:
       "A short programme for the lamp still burning. Not a playlist — a sitting.",
     ghazal_ids: [
-      "gh-021", // Ranjish
-      "gh-041", // Chupke
-      "gh-001", // Hothon
-      "gh-061", // Aye Mohabbat
-      "gh-081", // Aaj Jaane
-      "gh-042", // Hungama
-      "gh-161", // Dasht
-      "gh-181", // Mareez
+      "gh-021", // Ranjish Hi Sahi — Mehdi Hassan
+      "gh-041", // Chupke Chupke Raat Din — Ghulam Ali
+      "gh-001", // Hothon Se Chhoo Lo Tum — Jagjit Singh
+      "gh-022", // Gulon Mein Rang Bhare — Mehdi Hassan
+      "gh-081", // Aaj Jaane Ki Zid Na Karo — Farida Khanum
+      "gh-042", // Hungama Hai Kyon Barpa — Ghulam Ali
+      "gh-063", // Mere Humnafas Mere Humnawa — Begum Akhtar
+      "gh-009", // Woh Kaghaz Ki Kashti — Jagjit Singh
+      "gh-161", // Dasht-e-Tanhai Mein — Iqbal Bano
+      "gh-044", // Yeh Dil Yeh Pagal Dil Mera — Ghulam Ali
     ],
   },
   {
@@ -173,7 +183,7 @@ export const collections: Collection[] = [
     kicker: "1797–1869",
     description:
       "The poet against whom Urdu still measures itself, heard through Begum Akhtar, Mehdi Hassan, Jagjit Singh and others.",
-    ghazal_ids: idsBy((g) => g.poet_id === "mirza-ghalib", 16),
+    ghazal_ids: withRecordingsFirst(idsBy((g) => g.poet_id === "mirza-ghalib", 16)),
   },
   {
     id: "faiz-in-voice",
@@ -182,7 +192,7 @@ export const collections: Collection[] = [
     kicker: "The rose remains",
     description:
       "Gulon Mein Rang Bhare, Dasht-e-Tanhai, Hum Dekhenge — Faiz as he was carried into rooms.",
-    ghazal_ids: idsBy((g) => g.poet_id === "faiz-ahmed-faiz", 16),
+    ghazal_ids: withRecordingsFirst(idsBy((g) => g.poet_id === "faiz-ahmed-faiz", 16)),
   },
   {
     id: "film-ghazals",
@@ -211,7 +221,7 @@ export const collections: Collection[] = [
     kicker: "1980–1989",
     description:
       "The decade the ghazal became a drawing-room habit. Jagjit, Pankaj, Ghulam Ali, Munni Begum.",
-    ghazal_ids: idsBy((g) => g.era === "1980s", 16),
+    ghazal_ids: withRecordingsFirst(idsBy((g) => g.era === "1980s", 16)),
   },
   {
     id: "rain-and-longing",
