@@ -1,75 +1,94 @@
 "use client";
 
+import { useState } from "react";
 import { getSingers } from "@/lib/catalog";
-import { singerListenUrl } from "@/lib/spotify";
+import type { Singer } from "@/lib/types";
 
 export function Hero() {
   const singers = getSingers();
+  const [activeSinger, setActiveSinger] = useState<Singer | null>(null);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-[#0a0a0f]">
-      {/* Night sky */}
+      {/* Full-screen mehfil background image */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 60}%`,
-                opacity: Math.random() * 0.5 + 0.15,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Moon */}
-        <div className="absolute right-[12%] top-[6%]">
-          <div className="h-24 w-24 rounded-full bg-gradient-to-br from-[#f5f0e0] via-[#e8dcc0] to-[#d4c8a8] shadow-[0_0_60px_rgba(245,240,224,0.35),0_0_120px_rgba(245,240,224,0.15)] sm:h-28 sm:w-28 md:h-32 md:w-32" />
-        </div>
-
-        {/* Bottom glow */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#1a1208] via-[#0f0d08] to-transparent" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/hero/mehfil.jpg"
+          alt=""
+          className="h-full w-full object-cover"
+          style={{ filter: "brightness(0.55) saturate(1.1)" }}
+        />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f]/40 via-transparent to-[#0a0a0f]/80" />
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(10,10,15,0.6)_100%)]" />
       </div>
 
-      {/* Content — everything centered, no scroll */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6">
+      {/* Content overlay */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 pb-24">
         {/* Title */}
-        <p className="urdu text-4xl tracking-wider text-[#e8dcc0]/90 sm:text-5xl md:text-6xl lg:text-7xl" style={{ textShadow: "0 0 40px rgba(232,220,192,0.25)" }}>
-          غزل نامہ
-        </p>
-        <p className="mt-1 font-display text-2xl tracking-[0.3em] text-[#b08d3e]/70 sm:text-3xl md:text-4xl">
-          ग़ज़ल नामा
-        </p>
+        <div className="text-center">
+          <p
+            className="urdu text-5xl tracking-wider text-[#f5f0e0]/95 sm:text-6xl md:text-7xl lg:text-8xl"
+            style={{ textShadow: "0 2px 30px rgba(0,0,0,0.6), 0 0 60px rgba(232,220,192,0.2)" }}
+          >
+            غزل نامہ
+          </p>
+          <p
+            className="mt-1 font-display text-3xl tracking-[0.3em] text-[#e8dcc0]/80 sm:text-4xl md:text-5xl"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5)" }}
+          >
+            ग़ज़ल नामा
+          </p>
+        </div>
 
-        <p className="mt-4 font-display text-sm italic text-[#a09a8e]/60 sm:text-base">
-          A Home for Timeless Ghazals
-        </p>
-
-        {/* Singer names — click to listen on Spotify */}
-        <div className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-3 md:gap-x-8 md:gap-y-4">
+        {/* Singer names */}
+        <div className="mt-12 flex flex-wrap justify-center gap-x-5 gap-y-2 sm:gap-x-7 md:gap-x-8">
           {singers.map((singer) => (
-            <a
+            <button
               key={singer.id}
-              href={singerListenUrl(singer)}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative font-display text-lg italic text-[#c4a574]/70 transition-colors duration-300 hover:text-[#e8dcc0] sm:text-xl md:text-2xl"
+              type="button"
+              onClick={() => setActiveSinger(activeSinger?.id === singer.id ? null : singer)}
+              className={`font-display text-base italic transition-all duration-300 sm:text-lg md:text-xl ${
+                activeSinger?.id === singer.id
+                  ? "text-[#e8dcc0] scale-110"
+                  : "text-[#d4c8a8]/70 hover:text-[#f5f0e0]"
+              }`}
+              style={{ textShadow: "0 1px 12px rgba(0,0,0,0.7)" }}
             >
               {singer.name}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#b08d3e]/50 transition-all duration-300 group-hover:w-full" />
-            </a>
+            </button>
           ))}
         </div>
-
-        {/* Spotify hint */}
-        <p className="mt-10 font-mono text-[9px] tracking-[0.25em] text-[#a09a8e]/30 sm:text-[10px]">
-          CLICK A NAME TO LISTEN ON SPOTIFY
-        </p>
       </div>
+
+      {/* Spotify embed player — appears at bottom when singer is selected */}
+      {activeSinger && (
+        <div className="absolute bottom-0 left-0 right-0 z-20">
+          {/* Gradient fade behind player */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/90 to-transparent" />
+          <div className="relative px-4 pb-4 pt-16 sm:px-8 md:px-16">
+            <div className="mx-auto max-w-2xl">
+              <p className="mb-2 text-center font-display text-sm italic text-[#b08d3e] sm:text-base">
+                Now Playing: {activeSinger.name}
+              </p>
+              <div className="overflow-hidden rounded-xl shadow-2xl">
+                <iframe
+                  key={activeSinger.id}
+                  src={`https://open.spotify.com/embed/playlist/${activeSinger.spotify_playlist_id}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="152"
+                  style={{ borderRadius: "12px" }}
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="eager"
+                  title={`Play ${activeSinger.name}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
