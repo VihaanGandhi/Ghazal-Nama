@@ -17,16 +17,18 @@ export function Hero() {
           src="/images/hero/mehfil.jpg"
           alt=""
           className="h-full w-full object-cover"
-          style={{ filter: "brightness(0.5) saturate(1.1)" }}
+          style={{ filter: "brightness(0.45) saturate(1.1)" }}
         />
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f]/30 via-transparent to-[#0a0a0f]/85" />
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(10,10,15,0.65)_100%)]" />
+        {/* Dark overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0f]/30 via-transparent to-[#0a0a0f]/90" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(10,10,15,0.7)_100%)]" />
       </div>
 
       {/* Content overlay */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 pb-28">
+      <div
+        className="relative z-10 flex h-full flex-col items-center justify-center px-6"
+        style={{ paddingBottom: activeSinger ? "180px" : "0" }}
+      >
         {/* Title */}
         <div className="text-center">
           <p
@@ -63,43 +65,36 @@ export function Hero() {
         </div>
       </div>
 
-      {/* YouTube embed player — appears at bottom when singer is selected */}
+      {/* Bottom player bar — Spotify embed */}
       {activeSinger && (
         <div className="absolute bottom-0 left-0 right-0 z-20">
-          {/* Gradient fade behind player */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/95 to-transparent" />
-          <div className="relative px-4 pb-4 pt-12 sm:px-8 md:px-16">
-            <div className="mx-auto max-w-3xl">
-              <p className="mb-2 text-center font-display text-sm italic text-[#b08d3e] sm:text-base">
-                Now Playing: {activeSinger.name}
+          <div className="bg-[#0a0a0f]/95 backdrop-blur-md border-t border-[#2a2a35]">
+            {/* Singer label */}
+            <div className="flex items-center justify-between px-4 pt-3 sm:px-6">
+              <p className="font-display text-sm italic text-[#b08d3e]">
+                {activeSinger.name}
               </p>
-              <div className="overflow-hidden rounded-xl shadow-2xl">
-                {activeSinger.youtube_playlist_id ? (
-                  <iframe
-                    key={activeSinger.id}
-                    src={`https://www.youtube.com/embed/videoseries?list=${activeSinger.youtube_playlist_id}`}
-                    width="100%"
-                    height="180"
-                    style={{ border: 0 }}
-                    allow="autoplay; encrypted-media"
-                    allowFullScreen
-                    loading="eager"
-                    title={`Play ${activeSinger.name}`}
-                  />
-                ) : (
-                  <iframe
-                    key={activeSinger.id}
-                    src={`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(activeSinger.name + " ghazal")}`}
-                    width="100%"
-                    height="180"
-                    style={{ border: 0 }}
-                    allow="autoplay; encrypted-media"
-                    allowFullScreen
-                    loading="eager"
-                    title={`Play ${activeSinger.name}`}
-                  />
-                )}
-              </div>
+              <button
+                type="button"
+                onClick={() => setActiveSinger(null)}
+                className="font-mono text-[10px] tracking-[0.15em] text-[#a09a8e]/50 hover:text-[#e8e6e3] transition"
+              >
+                ✕ CLOSE
+              </button>
+            </div>
+
+            {/* Spotify embed — compact track list + controls */}
+            <div className="px-2 pb-3 sm:px-4">
+              <iframe
+                key={activeSinger.id}
+                src={`https://open.spotify.com/embed/playlist/${activeSinger.spotify_playlist_id}?utm_source=generator&theme=0`}
+                width="100%"
+                height="152"
+                style={{ borderRadius: "8px" }}
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="eager"
+                title={`Play ${activeSinger.name}`}
+              />
             </div>
           </div>
         </div>
