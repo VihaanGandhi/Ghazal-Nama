@@ -4,6 +4,7 @@ import { ghazalsBySinger, poetCount, singerCount } from "@/lib/catalog";
 import { recordings } from "@/data/recordings";
 import { classNames } from "@/lib/utils";
 import { CoverArt } from "./CoverArt";
+import { Plate } from "./Plate";
 import { PlayChip } from "./PlayChip";
 
 export function GhazalCard({
@@ -64,11 +65,11 @@ export function SingerCard({
     >
       <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-[2px] bg-night-300">
         {singer.photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Plate
             src={singer.photo}
             alt=""
-            className="duotone h-full w-full object-cover transition-transform duration-[1200ms] ease-silk group-hover:scale-110"
+            sizes="80px"
+            className="h-full w-full transition-transform duration-[1200ms] ease-silk group-hover:scale-110"
           />
         ) : (
           <CoverArt ghazal={{ id: singer.id, title: singer.name } as Ghazal} className="h-full w-full" />

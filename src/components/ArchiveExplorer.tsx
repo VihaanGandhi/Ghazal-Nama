@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { classNames } from "@/lib/utils";
 import { PlayChip } from "./PlayChip";
 
@@ -52,6 +52,9 @@ const POET_NAMES: Record<string, string> = {
   "quli-qutub-shah": "Quli Qutub Shah",
 };
 
+/** Rows painted on first load; the rest arrive on demand. */
+const WINDOW = 40;
+
 type Option = { id: string; name?: string; label?: string };
 
 function labelFor(option?: Option) {
@@ -77,6 +80,7 @@ export function ArchiveExplorer({
   const [mood, setMood] = useState("");
   const [era, setEra] = useState("");
   const [roomOnly, setRoomOnly] = useState(false);
+  const [limit, setLimit] = useState(WINDOW);
 
   const singerName = (id: string) => singers.find((s) => s.id === id)?.name ?? id;
 
@@ -100,7 +104,13 @@ export function ArchiveExplorer({
     });
   }, [rows, query, voice, poet, mood, era, roomOnly, singers]);
 
+  const filterKey = `${query}|${voice}|${poet}|${mood}|${era}|${roomOnly}`;
+  useEffect(() => {
+    setLimit(WINDOW);
+  }, [filterKey]);
+
   const visibleIds = filtered.map((r) => r.id);
+  const shown = limit >= filtered.length ? filtered : filtered.slice(0, limit);
   const reset = () => {
     setQuery("");
     setVoice("");
@@ -158,7 +168,7 @@ export function ArchiveExplorer({
       {/* Ledger */}
       <div className="panel overflow-hidden">
         <ul>
-          {filtered.map((row, i) => (
+          {shown.map((row, i) => (
             <li key={row.id}>
               <div className="ledger-row grid grid-cols-[2rem_2.5rem_1fr] items-center gap-3 px-4 py-3.5 sm:px-5 lg:grid-cols-[3rem_3rem_minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)_5rem]">
                 <span className="ledger-index hidden font-mono text-[11px] tabular-nums text-bone-faint lg:block">
@@ -202,6 +212,19 @@ export function ArchiveExplorer({
           <p className="p-10 text-center lede text-lg">
             Nothing answers to that combination. Loosen a filter.
           </p>
+        )}
+
+        {filtered.length > shown.length && (
+          <div className="border-t border-bone/[0.07] px-5 py-4 text-center">
+            <button
+              type="button"
+              onClick={() => setLimit((n) => n + WINDOW * 3)}
+              className="btn btn-line"
+            >
+              Show {Math.min(WINDOW * 3, filtered.length - shown.length)} more ·{" "}
+              {filtered.length - shown.length} still in the ledger
+            </button>
+          </div>
         )}
       </div>
     </div>

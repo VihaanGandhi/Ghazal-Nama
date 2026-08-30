@@ -10,7 +10,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "The poet against whom Urdu still measures itself.",
     bio: "Mirza Asadullah Khan Ghalib wrote as if the language were being invented in the next room. His Urdu ghazals — Dil-e-Nadan, Hazaaron Khwahishein, Aah Ko Chahiye — have been sung so often they can seem like folk song, which is a trick the poems themselves would have enjoyed. He preferred his Persian, history preferred his Urdu, and singers from Begum Akhtar to Jagjit Singh have kept the argument unfinished.",
-    photo: "/images/poets/mirza-ghalib.jpg",
   },
   {
     id: "faiz-ahmed-faiz",
@@ -21,7 +20,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "Revolution, and the rose that refused to leave the poem.",
     bio: "Faiz Ahmed Faiz made political hope sound like a love lyric, and love sound like a public matter. Gulon Mein Rang Bhare, Dasht-e-Tanhai, Mujh Se Pehli Si Mohabbat, Hum Dekhenge: the poems travel because they refuse a single addressee. Mehdi Hassan, Iqbal Bano, Begum Akhtar and Farida Khanum each found a different temperature in the same lines.",
-    photo: "/images/poets/faiz-ahmed-faiz.jpg",
   },
   {
     id: "ahmad-faraz",
@@ -32,7 +30,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "The modern heartbreak that still arrives in couplets.",
     bio: "Ahmad Faraz wrote the ghazals a later century actually needed — Ranjish Hi Sahi, Ab Ke Hum Bichde — poems of pride, exile and the quarrel that is also a plea. Mehdi Hassan’s recordings made Faraz a household name among people who might never have opened a diwan. The poems remain dangerously easy to memorise.",
-    photo: "/images/poets/ahmad-faraz.jpg",
   },
   {
     id: "nasir-kazmi",
@@ -43,7 +40,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "Partition’s quietest, most lasting ghazals.",
     bio: "Nasir Kazmi wrote after a world had ended, and he wrote as if the rooms were still half-packed. Hum Ko Kiske Gham Ne Mara is only the most travelled of a body of work that prefers the small hour to the manifesto. Ghulam Ali, among others, kept the poems in circulation when the century wanted louder forms.",
-    photo: "/images/poets/nasir-kazmi.jpg",
   },
   {
     id: "daagh-dehlvi",
@@ -54,7 +50,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "Wit, ease, and the Delhi that still speaks in his metre.",
     bio: "Nawab Mirza Khan Daagh Dehlvi taught a generation how to be light without being slight. Uzr Aane Mein Bhi Hai and Rasm-e-Ulfat remain concert favourites because they sit so naturally in the mouth. Begum Akhtar and Farida Khanum both understood that Daagh’s charm is a kind of precision.",
-    photo: "/images/poets/daagh-dehlvi.jpg",
   },
   {
     id: "meer-taqi-meer",
@@ -65,7 +60,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "The original melancholy, before it had a modern name.",
     bio: "Meer Taqi Meer is the poet later Urdu keeps returning to when it wants to remember what longing sounded like before the studio. Patta Patta Boota Boota, Ulti Ho Gayin Sab Tadbiren — the diction is plain, the wound is not. Mehdi Hassan and Begum Akhtar sang Meer as if he were a contemporary, which, in the ghazal, he is.",
-    photo: "/images/poets/meer-taqi-meer.jpg",
   },
   {
     id: "jigar-moradabadi",
@@ -76,7 +70,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "Ishq as intoxication, and the couplet as a glass.",
     bio: "Jigar Moradabadi kept the old metaphors of wine and tavern without making them museum pieces. His ghazals were concert material in Begum Akhtar’s lifetime and remain so whenever a singer wants the mehfil to lean forward. The name itself — Jigar — is already a thesis.",
-    photo: "/images/poets/jigar-moradabadi.jpg",
   },
   {
     id: "firaq-gorakhpuri",
@@ -87,7 +80,6 @@ export const poets: Poet[] = [
     featured: true,
     shortBio: "A modern mind, writing in an older music.",
     bio: "Raghupati Sahay Firaq Gorakhpuri wrote Urdu with a scholar’s restlessness and a lyricist’s ear. His ghazals sit at the edge of the classical canon and the twentieth century’s argument with itself. On Ghazal Nama he stands among the poets whose lines still wait, patiently, for the right voice.",
-    photo: "/images/poets/firaq-gorakhpuri.jpg",
   },
   {
     id: "hasrat-mohani",

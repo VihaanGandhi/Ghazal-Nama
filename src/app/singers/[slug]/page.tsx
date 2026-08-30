@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Divider, SectionLabel } from "@/components/Ornament";
 import { Reveal } from "@/components/Reveal";
+import { Plate } from "@/components/Plate";
 import { TrackList } from "@/components/TrackList";
 import { PoetCard } from "@/components/Cards";
 import {
@@ -45,11 +46,12 @@ export default function SingerPage({ params }: Params) {
         <div className="relative">
           <div className="relative aspect-[4/5] w-full overflow-hidden border border-bone/10">
             {singer.photo ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Plate
                 src={singer.photo}
                 alt={singer.name}
-                className="duotone h-full w-full object-cover mask-fade-b"
+                sizes="(max-width: 1024px) 90vw, 520px"
+                priority
+                className="h-full w-full mask-fade-b"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-night-200 font-display text-8xl text-bone-faint">

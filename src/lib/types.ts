@@ -30,7 +30,7 @@ export interface Singer {
   slug: string;
   bio: string;
   shortBio: string;
-  photo: string;
+  photo?: string;
   era: string;
   born?: string;
   died?: string;

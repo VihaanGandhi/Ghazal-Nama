@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Divider, SectionLabel } from "@/components/Ornament";
 import { Reveal } from "@/components/Reveal";
+import { Plate } from "@/components/Plate";
 import { StagePlayer } from "@/components/StagePlayer";
 import { TrackList } from "@/components/TrackList";
 import {
@@ -150,11 +151,11 @@ export default function GhazalPage({ params }: Params) {
               >
                 <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-bone/15">
                   {singer.photo && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Plate
                       src={singer.photo}
                       alt=""
-                      className="duotone h-full w-full object-cover transition-transform duration-[1200ms] ease-silk group-hover:scale-110"
+                      sizes="64px"
+                      className="h-full w-full transition-transform duration-[1200ms] ease-silk group-hover:scale-110"
                     />
                   )}
                 </span>

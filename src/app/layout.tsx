@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { SiteShell } from "@/components/SiteShell";
-import "@fontsource-variable/fraunces/full.css";
-import "@fontsource-variable/fraunces/full-italic.css";
+import "@fontsource-variable/fraunces/opsz.css";
+import "@fontsource-variable/fraunces/opsz-italic.css";
 import "@fontsource-variable/inter";
 import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
 import "@fontsource/noto-nastaliq-urdu/400.css";
-import "@fontsource/noto-nastaliq-urdu/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

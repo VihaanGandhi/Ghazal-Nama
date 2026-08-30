@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionLabel } from "@/components/Ornament";
 import { Reveal } from "@/components/Reveal";
+import { Plate } from "@/components/Plate";
 import { getSingers, singerCount } from "@/lib/catalog";
 import { ghazalsBySinger } from "@/lib/catalog";
 import { recordings } from "@/data/recordings";
@@ -37,11 +38,11 @@ export default function SingersPage() {
                     className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-bone/12 sm:h-28 sm:w-28"
                   >
                     {singer.photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Plate
                         src={singer.photo}
                         alt={singer.name}
-                        className="duotone h-full w-full object-cover transition-transform duration-[1400ms] ease-silk group-hover:scale-110"
+                        sizes="(max-width: 640px) 40vw, 160px"
+                        className="h-full w-full transition-transform duration-[1400ms] ease-silk group-hover:scale-110"
                       />
                     ) : (
                       <span className="flex h-full w-full items-center justify-center bg-night-300 font-display text-3xl text-bone-faint">
