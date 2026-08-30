@@ -49,6 +49,28 @@
 }
 
 @layer components {
+  /*
+   * The mehfil backdrop. It is a fixed layer, so it never scrolls with the
+   * ledger; the rows simply glide over it. A vertical paper wash keeps the
+   * text legible while letting the gathering glow through at the top.
+   */
+  .bg-mehfil {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: linear-gradient(
+        180deg,
+        rgba(245, 240, 230, 0.6) 0%,
+        rgba(245, 240, 230, 0.88) 42%,
+        rgba(245, 240, 230, 0.97) 100%
+      ),
+      url("/images/mehfil.jpg");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
   .sheet {
     @apply mx-auto w-full max-w-sheet px-5 sm:px-8;
   }
