@@ -15,6 +15,7 @@ export const singers: Singer[] = [
     origin: "Sri Ganganagar",
     featured: true,
     spotify_playlist_id: "6p7ZO9gJhtmp5o8DtjRDNN",
+    youtube_playlist_id: "PLB23425F01C9B2084",
   },
   {
     id: "mehdi-hassan",
@@ -30,6 +31,7 @@ export const singers: Singer[] = [
     origin: "Luna / Pakistan",
     featured: true,
     spotify_playlist_id: "7BCUgw3xRwX2vwi4LnhZCt",
+    youtube_playlist_id: "PLeHcbwsMVRm6B3IXmz9kQKjQftrPhfFRG",
   },
   {
     id: "ghulam-ali",
@@ -44,6 +46,7 @@ export const singers: Singer[] = [
     origin: "Sialkot",
     featured: true,
     spotify_playlist_id: "7pU9HIWPOeZrn0wzEQjaA9",
+    youtube_playlist_id: "PLJeNQvgQ4Sl8FTWl-C5OADPEcVWq25OA7",
   },
   {
     id: "begum-akhtar",
@@ -59,6 +62,7 @@ export const singers: Singer[] = [
     origin: "Faizabad",
     featured: true,
     spotify_playlist_id: "1iqrwC3NOSUecGLTHyOS83",
+    youtube_playlist_id: "PL8XQN3kkOyKMLAm4bFsSBsCiRali0ck4o",
   },
   {
     id: "talat-mahmood",
@@ -74,6 +78,7 @@ export const singers: Singer[] = [
     origin: "Lucknow",
     featured: true,
     spotify_playlist_id: "4lo8Gq7lof8XKA0zyeWq2U",
+    youtube_playlist_id: "PLUOEf-vLOCSnHVVeuNm7hfKUHCig3b3fE",
   },
   {
     id: "pankaj-udhas",
@@ -89,6 +94,7 @@ export const singers: Singer[] = [
     origin: "Jetpur",
     featured: true,
     spotify_playlist_id: "2M89jV3Ueqlp6y73iWm1wm",
+    youtube_playlist_id: "PL4158AB5A53B4D5FE",
   },
   {
     id: "hariharan",
@@ -103,6 +109,7 @@ export const singers: Singer[] = [
     origin: "Thiruvananthapuram",
     featured: true,
     spotify_playlist_id: "0Eo4Q95ahNAoYOzaUIrrym",
+    youtube_playlist_id: "PLO6WOx_nE9UJH3tHjYFRpoDAjNXNgOC39",
   },
   {
     id: "iqbal-bano",
@@ -118,5 +125,6 @@ export const singers: Singer[] = [
     origin: "Delhi / Lahore",
     featured: true,
     spotify_playlist_id: "2b4tDrAPVowQjFLIMV24EB",
+    youtube_playlist_id: "PL8XQN3kkOyKMLAm4bFsSBsCiRali0ck4o",
   },
 ];

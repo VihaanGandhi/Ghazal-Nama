@@ -37,6 +37,7 @@ export interface Singer {
   honorific?: string;
   origin?: string;
   spotify_playlist_id?: string | null;
+  youtube_playlist_id?: string | null;
   featured: boolean;
 }
 
