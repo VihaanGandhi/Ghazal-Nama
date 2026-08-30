@@ -1,63 +1,56 @@
 # Ghazal Nama
 
-**Where poetry finds a voice.**
+Two hundred ghazals, ten voices. One ledger. Press play.
 
-A living archive of South Asian ghazal — 200 recordings catalogued across 10 voices and 31 poets,
-with a **listening room** that actually plays: press a ghazal and it runs, in full, while you keep
-reading the archive.
+Nothing else. No essays, no biographies, no moods or eras or collections — the
+prose was cut and the site is the list.
 
-## What is here
+## What's here
 
-- **The archive** (`/archive`) — every recording as a ledger row, filterable by voice, poet, mood,
-  era and year, playable in place.
-- **The listening room** (`/listen`) — a programme rather than a shuffle. One player lives in the
-  dock at the bottom of every page, so a ghazal keeps playing across navigation.
-- **Voices, poets, albums, collections, moods, eras** — each with its own page and its own queue.
-- **Registrar** (`/admin`) — propose a recording; kept in the browser only.
+| Route | What it is |
+| --- | --- |
+| `/` | All 200 ghazals: a searchable ledger, filterable by voice. Click a row to play it. |
+| `/song/[slug]` | One ghazal — title, voice, poet, year, a play button, and more by that voice. |
 
-## How playback works
+A fixed dock at the bottom holds the video frame and the transport. It is on the
+page from the first paint, empty, because the player has to be built before it
+is asked to play.
 
-Nothing is re-hosted. Every playable recording points at one specific public upload — usually the
-label's own channel (Saregama, EMI Pakistan, Universal, Sony, T-Series, Shemaroo) — checked against
-YouTube's oEmbed endpoint before it was added. The map lives in
-[`src/data/recordings.ts`](./src/data/recordings.ts), keyed by ghazal id, each entry carrying the
-channel or release it was verified against:
+## Playback
 
-```ts
-"gh-021": { youtubeId: "Xc6uwbXpmUY", source: "Mehdi Hassan – Topic · Greatest Ghazals (1988)" },
+Every recording is one specific public YouTube upload, checked individually
+against YouTube's oEmbed endpoint before it was listed — title and channel both
+confirmed, so pressing play produces the performance rather than a search page.
+25 of the 200 have a verified recording. Where none could be confirmed, the row
+says so and offers a search instead of guessing an id.
+
+`src/data/recordings.ts` is the list. Re-check it with:
+
+```
+https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=<ID>&format=json
 ```
 
-Adding an entry there is what puts a recording in the listening room; the rest of the site picks it
-up automatically (the row lights up, the collection re-orders, the count on the footer changes).
+`Not Found` means the upload is gone; `Unauthorized` means embedding is blocked.
+Either way the id must not ship.
 
-A recording that could not be confirmed — or whose owner blocks embedding — stays catalogued, says
-so, and offers a search instead. YouTube's `listType=search` embed is deprecated, so nothing here
-guesses at an id.
+## Architecture
 
-## Stack
+`src/lib/tracks.ts` reduces the catalogue to a `Track` — id, slug, title, voice,
+poet, year, video id — and that is the only shape the browser ever receives.
+Song descriptions, excerpts and biographies stay on the server and are not
+rendered anywhere. Nothing under `src/` imports `@/data` on the client, so the
+catalogue is not in the JavaScript bundle.
 
-- Next.js (App Router) · TypeScript · Tailwind CSS
-- Local catalogue in `src/data` (recordings, singers, poets, albums, moods, eras, collections)
-- YouTube IFrame Player API for playback; Fraunces / Inter / Noto Nastaliq Urdu / IBM Plex Mono,
-  all self-hosted via Fontsource
-- [`supabase/schema.sql`](./supabase/schema.sql) is included as a starting point if you want to
-  persist the catalogue later — the site ships without it
+The player (`src/context/PlayerContext.tsx`) drives the YouTube IFrame API and
+persists the sitting — the queue travels as tracks, so restoring it needs no
+lookup table either.
 
-## Develop
+## Running it
 
 ```bash
 npm install
-npm run dev
+npm run build && npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Integrity
-
-Where a poet, year, album or source could not be confirmed, the field is empty rather than
-guessed. Two entries corrected on the last pass: *Hothon Se Chhoo Lo Tum* is credited to Indeevar
-(not Shiv Kumar Batalvi), and two recordings whose uploads had disappeared or blocked embedding
-were replaced after re-checking every id in `recordings.ts`.
-
-Portrait plates and covers are archival in spirit — generated stills and typographic plates, not
-licensed publicity photographs.
+Next.js 14 App Router, TypeScript, Tailwind. The build produces 205 static
+pages; a page weighs about 130 KB on the wire including all CSS and JS (the 40 KB polyfill file is `noModule`, so modern browsers skip it).

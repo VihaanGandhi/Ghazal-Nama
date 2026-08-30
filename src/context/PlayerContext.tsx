@@ -9,9 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { Ghazal } from "@/lib/types";
-import { recordings } from "@/data/recordings";
-import { getGhazalById } from "@/lib/catalog";
+import type { Track } from "@/lib/types";
 
 /* global YT */
 
@@ -23,8 +21,8 @@ export type PlaybackStatus =
   | "unavailable";
 
 type PlayerValue = {
-  current: Ghazal | null;
-  queue: Ghazal[];
+  current: Track | null;
+  queue: Track[];
   index: number;
   status: PlaybackStatus;
   progress: number;
@@ -34,7 +32,7 @@ type PlayerValue = {
   expanded: boolean;
   needsGesture: boolean;
   attachHost: (el: HTMLDivElement | null) => void;
-  play: (ghazal: Ghazal, queue?: Ghazal[]) => void;
+  play: (track: Track, queue?: Track[]) => void;
   toggle: () => void;
   next: () => void;
   prev: () => void;
@@ -47,7 +45,7 @@ type PlayerValue = {
 
 const PlayerContext = createContext<PlayerValue | null>(null);
 
-const STORAGE_KEY = "ghazal-nama:session";
+const STORAGE_KEY = "ghazal-nama:session:v2";
 const HOST_ID = "ghazal-nama-yt-host";
 
 /** Loads the YouTube IFrame API exactly once per page life. */
@@ -81,7 +79,7 @@ declare global {
 }
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
-  const [queue, setQueue] = useState<Ghazal[]>([]);
+  const [queue, setQueue] = useState<Track[]>([]);
   const [index, setIndex] = useState(-1);
   const [status, setStatus] = useState<PlaybackStatus>("idle");
   const [progress, setProgress] = useState(0);
@@ -105,7 +103,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   live.current = { queue, index };
 
   const current = index >= 0 ? queue[index] ?? null : null;
-  const currentRecording = current ? recordings[current.id] : undefined;
+  // The recording travels with the track, so the browser never needs the catalogue.
+  const currentRecording = current?.videoId ? { youtubeId: current.videoId } : undefined;
 
   const startPolling = useCallback(() => {
     if (pollRef.current) return;
@@ -196,16 +195,16 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw) as {
-        queueIds?: string[];
+        queue?: Track[];
         index?: number;
         volume?: number;
         muted?: boolean;
       };
       if (typeof parsed.volume === "number") setVolumeState(parsed.volume);
       if (typeof parsed.muted === "boolean") setMuted(parsed.muted);
-      const restoredQueue = (parsed.queueIds ?? [])
-        .map((id) => getGhazalById(id))
-        .filter((g): g is Ghazal => Boolean(g));
+      const restoredQueue = (parsed.queue ?? []).filter(
+        (t): t is Track => Boolean(t && typeof t.id === "string" && typeof t.title === "string")
+      );
       if (!restoredQueue.length) return;
       setQueue(restoredQueue);
       const idx = Math.min(Math.max(parsed.index ?? 0, 0), restoredQueue.length - 1);
@@ -223,7 +222,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ queueIds: queue.map((g) => g.id), index, volume, muted })
+        JSON.stringify({ queue, index, volume, muted })
       );
     } catch {
       /* storage may be unavailable; the session simply will not be remembered */
@@ -275,25 +274,25 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => () => stopPolling(), [stopPolling]);
 
-  const play = useCallback((ghazal: Ghazal, nextQueue?: Ghazal[]) => {
+  const play = useCallback((track: Track, nextQueue?: Track[]) => {
     const prevQueue = live.current.queue;
     let list = prevQueue;
-    let target = prevQueue.findIndex((g) => g.id === ghazal.id);
+    let target = prevQueue.findIndex((t) => t.id === track.id);
     if (nextQueue?.length) {
       list = nextQueue;
       target = Math.max(
         0,
-        nextQueue.findIndex((g) => g.id === ghazal.id)
+        nextQueue.findIndex((t) => t.id === track.id)
       );
     } else if (target < 0) {
-      list = [...prevQueue, ghazal];
+      list = [...prevQueue, track];
       target = list.length - 1;
     }
     setQueue(list);
     setIndex(target);
     // A ghazal without a confirmed recording still becomes the current entry so
     // the dock can explain itself and offer a search — it never fakes playback.
-    setStatus(recordings[ghazal.id] ? "loading" : "unavailable");
+    setStatus(track.videoId ? "loading" : "unavailable");
     setNeedsGesture(false);
   }, []);
 

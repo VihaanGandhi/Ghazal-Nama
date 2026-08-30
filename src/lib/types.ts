@@ -111,3 +111,31 @@ export interface Catalog {
   ghazals: Ghazal[];
   collections: Collection[];
 }
+
+/**
+ * Track — the only shape the browser ever sees.
+ *
+ * A song, its voice, its year and the id of the recording that plays it.
+ * No description, no excerpt, no biography: the catalogue's prose stays on
+ * the server, which is also why the client bundle no longer carries it.
+ */
+export interface Track {
+  id: string;
+  slug: string;
+  title: string;
+  titleUrdu: string | null;
+  singer: string;
+  singerSlug: string;
+  poet: string | null;
+  year: number | null;
+  /** YouTube id of the verified upload, or null when there is none. */
+  videoId: string | null;
+  source: string | null;
+}
+
+/** A voice and how many of the two hundred it carries. */
+export interface Voice {
+  slug: string;
+  name: string;
+  count: number;
+}
